@@ -1,0 +1,36 @@
+{
+  "name": "triton-exchange",
+  "version": "0.0.1",
+  "description": "Free and For Sale Marketplace for UC San Diego Students",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Triton-Exchange/te-app-backend.git"
+  },
+  "keywords": [
+    "Marketplace",
+    "AWS",
+    "UCSD"
+  ],
+  "author": "Paul Pan",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Triton-Exchange/te-app-backend/issues"
+  },
+  "homepage": "https://github.com/Triton-Exchange/te-app-backend#readme",
+  "dependencies": {
+    "aws-serverless-express": "^3.3.8",
+    "express": "^4.17.1",
+    "serverless-dynamodb-local": "^0.2.39"
+  },
+  "devDependencies": {
+    "@types/aws-serverless-express": "^3.3.3",
+    "@types/express": "^4.17.6",
+    "serverless-offline": "^6.1.4",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.8.3"
+  }
+}

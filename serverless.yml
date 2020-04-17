@@ -20,6 +20,11 @@ org: panjunhong05
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
 
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -59,7 +64,12 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: index.handler
+    events:
+      - http: ANY /
+        cors: true
+      - http: 'ANY {proxy+}'
+        cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -111,3 +121,16 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
