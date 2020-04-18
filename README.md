@@ -1,5 +1,12 @@
 # Triton Exchange Backend
 
+## Project technologies
+ - Firebase Auth
+ - AWS DynamoDB
+ - AWS Lambda / API Gateway
+ - Serverless (for deployment on master branch)
+
+## How to set up
 To set up project
 ```sh
 npm i -g serverless
@@ -15,5 +22,5 @@ npm start
 
 ## Deployment
 
-App is deployed every time new changes are pushed to master brach
+App is deployed every time new changes are pushed to master brach, via Serverless CI
 API ![URL](https://jyvj8lobs9.execute-api.us-east-1.amazonaws.com/prod)
