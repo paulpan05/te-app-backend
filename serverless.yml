@@ -63,7 +63,7 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  triton-exchange:
+  main:
     handler: index.handler
     events:
       - http: ANY /
