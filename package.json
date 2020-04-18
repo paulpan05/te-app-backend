@@ -4,7 +4,8 @@
   "description": "Free and For Sale Marketplace for UC San Diego Students",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install-db": "sls dynamodb install",
+    "start": "sls offline start"
   },
   "repository": {
     "type": "git",
