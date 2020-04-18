@@ -25,6 +25,7 @@
   "dependencies": {
     "aws-serverless-express": "^3.3.8",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "serverless-dynamodb-local": "^0.2.39"
   },
   "devDependencies": {
