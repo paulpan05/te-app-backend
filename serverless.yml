@@ -64,7 +64,7 @@ provider:
 
 functions:
   main:
-    handler: index.handler
+    handler: index.default
     events:
       - http: ANY /
         cors: true
