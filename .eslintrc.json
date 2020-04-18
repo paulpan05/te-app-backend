@@ -3,16 +3,12 @@
     "eslint:recommended",
     "airbnb-base"
   ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
   "rules": {
-    "consistent-return": 0,
-    "func-names": "off",
-    "global-require": "off",
-    "max-classes-per-file": "warn",
-    "max-len": ["error", {"code": 120}],
-    "no-bitwise": ["error", {"allow": ["^"]}],
-    "no-param-reassign": "off",
-    "no-unused-vars": ["error", {"argsIgnorePattern": "next|transaction|Sequelize"}],
-    "object-curly-newline": ["error", {"consistent": true}],
     "import/extensions": ["error", "ignorePackages", {
       "js": "never",
       "mjs": "never",
