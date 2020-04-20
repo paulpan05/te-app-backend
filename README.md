@@ -23,5 +23,3 @@ npm start
 ## Deployment
 
 App is deployed every time new changes are pushed to master brach, via Serverless CI
-
-API Link: https://jyvj8lobs9.execute-api.us-east-1.amazonaws.com/prod
