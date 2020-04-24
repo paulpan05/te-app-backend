@@ -1,41 +1,17 @@
 {
+  "parser": "@typescript-eslint/parser",
   "extends": [
-    "eslint:recommended",
-    "airbnb-base"
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript/base"
   ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
   "env": {
     "browser": true,
     "node": true,
     "jest": true
-  },
-  "rules": {
-    "import/extensions": ["error", "ignorePackages", {
-      "js": "never",
-      "mjs": "never",
-      "jsx": "never",
-      "ts": "never",
-      "tsx": "never"
-    }]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".mjs", ".jsx", ".ts", ".tsx"]
-      }
-    }
-  },
-  "overrides": [
-    {
-      "files": [
-        "**/*.test.js",
-        "**/*.test.mjs",
-        "**/*.test.jsx",
-        "**/*.test.ts",
-        "**/*.test.tsx"
-      ],
-      "env": {
-        "jest": true
-      }
-    }
-  ]
+  }
 }
