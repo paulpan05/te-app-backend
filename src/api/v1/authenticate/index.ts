@@ -77,7 +77,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
       algorithms: [config.firebase.alg as jwt.Algorithm],
     });
     return next();
-  } catch (error) {
+  } catch (err) {
     return next(new HTTPError.Unauthorized());
   }
 };
