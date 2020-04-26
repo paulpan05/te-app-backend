@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
+    "module": "esnext",
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "sourceMap": true,
     "allowJs": true,
-    "target": "es5",
+    "target": "es2017",
     "outDir": ".build",
     "moduleResolution": "node",
-    "lib": ["es2015"],
+    "lib": ["es2017"],
     "rootDir": "./"
   }
 }
