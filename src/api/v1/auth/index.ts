@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import fetch, { Response as FetchResponse } from 'node-fetch';
 import * as jwt from 'jsonwebtoken';
 import config from '../../../config';
+import HTTPError from '../../../error/http';
 
 interface Header {
   alg: string;
@@ -31,21 +32,22 @@ const handleFetchNotOk = <T>(response: FetchResponse): Promise<T> => {
 const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.get('Authorization');
   if (!authHeader) {
-    return next();
+    return next(new HTTPError.Unauthorized());
   }
 
   const authParams = authHeader.split(' ');
   if (authParams.length !== 2 || authParams[0] !== 'Bearer' || authParams[1].length === 0) {
-    return next();
+    return next(new HTTPError.Unauthorized());
   }
 
-  const decodedToken = jwt.decode(authParams[1], { complete: true });
+  const jwtToken = authParams[1];
+  const decodedToken = jwt.decode(jwtToken, { complete: true });
   if (!decodedToken) {
-    return next();
+    return next(new HTTPError.Unauthorized());
   }
 
   if (typeof decodedToken === 'string') {
-    return next();
+    return next(new HTTPError.Unauthorized());
   }
 
   const { header, payload } = decodedToken as {
@@ -53,11 +55,10 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
     payload: Payload;
   } & typeof decodedToken;
 
-  const curTime = Date.now();
-
   try {
     const apiResponse = await fetch(config.firebase.publicKeyUrl);
     const response = await handleFetchNotOk<PublicKeysResponse>(apiResponse);
+    const curTime = Date.now();
     if (
       header.alg !== 'RS256' ||
       !(header.kid in Object.keys(response)) ||
@@ -70,11 +71,14 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
       payload.sub.length > 128 ||
       payload.auth_time - curTime > 0
     ) {
-      return next();
+      return next(new HTTPError.Unauthorized());
     }
+    jwt.verify(jwtToken, response[header.kid], {
+      algorithms: [config.firebase.alg as jwt.Algorithm],
+    });
     return next();
   } catch (error) {
-    return next();
+    return next(new HTTPError.Unauthorized());
   }
 };
 
