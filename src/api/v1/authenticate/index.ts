@@ -58,7 +58,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const apiResponse = await fetch(config.firebase.publicKeyUrl);
     const response = await handleFetchNotOk<PublicKeysResponse>(apiResponse);
-    const curTime = Math.floor(Date.now() / 1000);
+    const curTime = Math.ceil(Date.now() / 1000);
     if (
       header.alg !== 'RS256' ||
       !(header.kid in response) ||
