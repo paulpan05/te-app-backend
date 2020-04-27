@@ -16,4 +16,8 @@ module.exports = {
     node: true,
     jest: true,
   },
+  rules: {
+    'operator-linebreak': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+  },
 };
