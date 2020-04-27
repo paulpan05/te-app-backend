@@ -1,10 +1,9 @@
-import * as dotenv from 'dotenv';
-
 const env = process.env.NODE_ENV || 'development';
 const isDevelopment = env !== 'production';
 
 if (isDevelopment) {
-  dotenv.config();
+  // eslint-disable-next-line global-require
+  require('dotenv').config();
 }
 
 const config = {
