@@ -1,5 +1,7 @@
 # Triton Exchange Backend
 
+[![Build Status](https://travis-ci.com/paulpan05/te-app-backend.svg?token=AwrSN7YWy67cvrqMpyHB&branch=master)](https://travis-ci.com/paulpan05/te-app-backend)
+
 ## Project technologies
  - Firebase Auth
  - AWS DynamoDB
