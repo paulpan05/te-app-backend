@@ -58,10 +58,10 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const apiResponse = await fetch(config.firebase.publicKeyUrl);
     const response = await handleFetchNotOk<PublicKeysResponse>(apiResponse);
-    const curTime = Date.now();
+    const curTime = Math.floor(Date.now() / 1000);
     if (
       header.alg !== 'RS256' ||
-      !(header.kid in Object.keys(response)) ||
+      !(header.kid in response) ||
       payload.exp - curTime < 0 ||
       payload.iat - curTime > 0 ||
       payload.aud !== config.firebase.projectId ||
