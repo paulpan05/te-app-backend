@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install-db": "sls dynamodb install",
-    "start": "sls offline start",
+    "start": "sls offline start -s dev",
     "lint": "eslint ./ --ext .js,.mjs,.ts --color",
     "lint:fix": "eslint ./ --ext .js,.mjs,.ts --fix",
     "test": "jest --config jest.config.js"

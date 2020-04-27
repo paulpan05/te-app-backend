@@ -80,6 +80,8 @@ functions:
         cors: true
       - http: 'ANY {proxy+}'
         cors: true
+    environment:
+      NODE_ENV: ${self:custom.nodeEnv.${opt:stage}}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -155,3 +157,6 @@ custom:
       migrate: true
       seed: true
       convertEmptyValues: true
+  nodeEnv:
+    dev: development
+    prod: production
