@@ -5,7 +5,7 @@ import httpErrorHandler from './error/handlers';
 const app = express();
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'triton-exchange.netlify.app');
+  res.header('Access-Control-Allow-Origin', 'https://triton-exchange.netlify.app');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization',
