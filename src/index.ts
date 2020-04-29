@@ -1,6 +1,6 @@
 import * as express from 'express';
 import api from './api';
-import { httpErrorHandler } from './error/handlers';
+import { httpErrorHandler, notFoundHandler } from './error/handlers';
 
 const app = express();
 
@@ -15,5 +15,6 @@ app.use((req, res, next) => {
 
 app.use('/api/', api);
 app.use(httpErrorHandler);
+app.use(notFoundHandler);
 
 export default app;
