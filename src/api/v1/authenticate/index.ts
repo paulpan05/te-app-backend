@@ -7,6 +7,7 @@ import HTTPError from '../../../error/http';
 interface Header {
   alg: string;
   kid: string;
+  [key: string]: any;
 }
 
 interface Payload {
@@ -16,6 +17,7 @@ interface Payload {
   iss: string;
   sub: string;
   auth_time: number;
+  [key: string]: any;
 }
 
 interface PublicKeysResponse {

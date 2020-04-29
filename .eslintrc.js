@@ -19,5 +19,6 @@ module.exports = {
   rules: {
     'operator-linebreak': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
