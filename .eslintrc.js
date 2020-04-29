@@ -1,7 +1,5 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
   extends: [
-    'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
     'airbnb-typescript/base',
@@ -19,6 +17,5 @@ module.exports = {
   rules: {
     'operator-linebreak': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
