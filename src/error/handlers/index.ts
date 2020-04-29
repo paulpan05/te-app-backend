@@ -1,3 +1,4 @@
 import httpErrorHandler from './http';
 
-export default httpErrorHandler;
+// eslint-disable-next-line import/prefer-default-export
+export { httpErrorHandler };

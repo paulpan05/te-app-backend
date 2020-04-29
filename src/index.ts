@@ -1,6 +1,6 @@
 import * as express from 'express';
 import api from './api';
-import httpErrorHandler from './error/handlers';
+import { httpErrorHandler } from './error/handlers';
 
 const app = express();
 
