@@ -22,6 +22,8 @@ To test app locally
 npm start
 ```
 
+Install ESLint and Prettier plugins on your Visual Studio Code to enable automatic syntax warning and correction.
+
 ## Deployment
 
 App is deployed every time new changes are pushed to master brach, via Serverless CI
