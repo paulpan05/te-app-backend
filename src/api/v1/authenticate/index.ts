@@ -78,6 +78,10 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
     jwt.verify(jwtToken, response[header.kid], {
       algorithms: [config.firebase.alg as jwt.Algorithm],
     });
+    res.locals.name = payload.name;
+    res.locals.picture = payload.picture;
+    res.locals.userId = payload.user_id;
+    res.locals.email = payload.email;
     return next();
   } catch (err) {
     return next(new HTTPError.Unauthorized());
