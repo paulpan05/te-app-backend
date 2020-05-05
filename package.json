@@ -4,8 +4,7 @@
   "description": "Free and For Sale Marketplace for UC San Diego Students",
   "main": "index.js",
   "scripts": {
-    "install-db": "sls dynamodb install -s dev",
-    "start": "sls offline start -s dev",
+    "start": "sls dynamodb install -s dev && sls offline start -s dev",
     "lint": "eslint ./ --ext .js,.mjs,.ts --color",
     "lint:fix": "eslint ./ --ext .js,.mjs,.ts --fix",
     "test": "jest --config jest.config.js --passWithNoTests"
