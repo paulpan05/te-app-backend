@@ -1,6 +1,4 @@
 service: triton-exchange
-app: triton-exchange
-org: panjunhong05
 
 plugins:
   - serverless-plugin-typescript

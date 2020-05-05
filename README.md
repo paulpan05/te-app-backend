@@ -10,10 +10,9 @@
 
 ## How to set up
 To set up project
+
 ```sh
-npm i -g serverless
-npm i
-npm run install-db
+npm install
 ```
 
 To test app locally
