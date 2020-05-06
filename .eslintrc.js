@@ -1,8 +1,8 @@
 module.exports = {
   extends: [
+    'airbnb-typescript/base',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
-    'airbnb-typescript/base',
   ],
   parserOptions: {
     ecmaVersion: 6,
@@ -15,7 +15,6 @@ module.exports = {
     jest: true,
   },
   rules: {
-    'operator-linebreak': 'off',
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: ['./src/config/*', 'index.ts'] }],
   },
 };

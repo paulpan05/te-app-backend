@@ -8,10 +8,10 @@ if (isDevelopment) {
 
 const config = {
   firebase: {
-    alg: 'RS256',
-    projectId: 'triton-exchange',
-    publicKeyUrl:
-      'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com',
+    alg: process.env.ALG,
+    projectId: process.env.PROJECT_ID!,
+    publicKeyUrl: process.env.PUBLIC_KEY_URL!,
+    issUrl: process.env.ISS_URL!,
   },
 };
 
