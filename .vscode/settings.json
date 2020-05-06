@@ -5,5 +5,10 @@
   "eslint.validate": [
     "javascript",
     "typescript"
-  ]
+  ],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
 }

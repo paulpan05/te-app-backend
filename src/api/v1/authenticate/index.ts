@@ -62,12 +62,12 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
     const response = await handleFetchNotOk<PublicKeysResponse>(apiResponse);
     const curTime = Math.ceil(Date.now() / 1000);
     if (
-      header.alg !== 'RS256' ||
+      header.alg !== config.firebase.alg ||
       !(header.kid in response) ||
       payload.exp - curTime < 0 ||
       payload.iat - curTime > 0 ||
       payload.aud !== config.firebase.projectId ||
-      payload.iss !== `https://securetoken.google.com/${config.firebase.projectId}` ||
+      payload.iss !== config.firebase.issUrl ||
       typeof payload.sub !== 'string' ||
       payload.sub === '' ||
       payload.sub.length > 128 ||

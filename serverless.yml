@@ -31,6 +31,10 @@ functions:
         cors: true
     environment:
       NODE_ENV: ${self:custom.nodeEnv.${opt:stage}}
+      ALG: RS256
+      PROJECT_ID: triton-exchange
+      PUBLIC_KEY_URL: https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
+      ISS_URL: https://securetoken.google.com/triton-exchange
 
 resources:
   Resources:
