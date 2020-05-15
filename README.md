@@ -25,4 +25,4 @@ Install ESLint and Prettier plugins on your Visual Studio Code to enable automat
 
 ## Deployment
 
-App is deployed every time new changes are pushed to master brach, via Serverless CI
+App is deployed every time new changes are pushed to master brach, via GitHub Actions
