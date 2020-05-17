@@ -75,17 +75,6 @@ resources:
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-    TEListingDetailsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: TEListingDetailsTable
-        AttributeDefinitions:
-          - AttributeName: listingId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: listingId
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
     TETagsTable:
       Type: AWS::DynamoDB::Table
       Properties:
