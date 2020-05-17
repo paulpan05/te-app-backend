@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 
-class ReportsTable {
+class Reports {
   docClient: DynamoDB.DocumentClient;
 
   constructor(docClient: DynamoDB.DocumentClient) {
@@ -8,4 +8,4 @@ class ReportsTable {
   }
 }
 
-export default ReportsTable;
+export default Reports;

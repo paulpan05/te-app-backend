@@ -15,6 +15,6 @@ module.exports = {
     jest: true,
   },
   rules: {
-    'import/no-extraneous-dependencies': ['error', { devDependencies: ['index.ts', './src/config/*', './src/db/*'] }],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };
