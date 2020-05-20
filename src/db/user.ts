@@ -8,7 +8,7 @@ class Users {
   }
 
   async createProfile(
-    userId: number,
+    userId: string,
     name: string,
     email: string,
     phone: string,
