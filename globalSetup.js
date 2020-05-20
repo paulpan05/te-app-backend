@@ -27,8 +27,8 @@ module.exports = async () => {
 
   process.child = await DynamoDbLocal.launch(dynamoLocalPort, null, [], false, true); // must be wrapped in async function
   AWS.config.update(config);
-  const fullDynamo = new AWS.DynamoDB(config);
-  process.dynamodb = new AWS.DynamoDB.DocumentClient(config);
+  const fullDynamo = new AWS.DynamoDB();
+  process.dynamodb = new AWS.DynamoDB.DocumentClient();
   const file = fs.readFileSync('./serverless.yml', 'utf-8');
 
   const resources = Object.values(YAML.parse(file).resources.Resources);
