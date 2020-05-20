@@ -4,7 +4,7 @@
   "description": "Free and For Sale Marketplace for UC San Diego Students",
   "main": "index.ts",
   "scripts": {
-    "start": "sls dynamodb install -s dev && sls offline start -s dev",
+    "start": "sls dynamodb install && sls offline start",
     "lint": "eslint ./ --ext .js,.mjs,.ts --color",
     "lint:fix": "eslint ./ --ext .js,.mjs,.ts --fix",
     "test": "jest",
