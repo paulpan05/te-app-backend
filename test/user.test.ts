@@ -18,6 +18,8 @@ const config = {
 let child;
 let dynamodb;
 
+const customTimeout = 30000;
+
 async function asyncForEach(array: [any], callback: Function) {
   for (let index = 0; index < array.length; index += 1) {
     // eslint-disable-next-line no-await-in-loop
@@ -43,22 +45,26 @@ beforeAll(async () => {
     const { Properties } = value;
     await fullDynamo.createTable(Properties).promise();
   });
-});
+}, customTimeout);
 
-it('DynamoDB test', async () => {
-  await new Users(dynamodb).createProfile(
-    'asdfsaf',
-    'Paul Pan',
-    'panjunhong05@gmail.com',
-    '+1 (626) 691-8088',
-    'Los Angeles, CA',
-    'hello.jpg',
-  );
-  const result = await new Users(dynamodb).getProfile('asdfsaf');
-  expect(result!.name).toBe('Paul Pan');
-  return true;
-}, 30000);
+it(
+  'DynamoDB test',
+  async () => {
+    await new Users(dynamodb).createProfile(
+      'asdfsaf',
+      'Paul Pan',
+      'panjunhong05@gmail.com',
+      '+1 (626) 691-8088',
+      'Los Angeles, CA',
+      'hello.jpg',
+    );
+    const result = await new Users(dynamodb).getProfile('asdfsaf');
+    expect(result!.name).toBe('Paul Pan');
+    return true;
+  },
+  customTimeout,
+);
 
 afterAll(async () => {
   await DynamoDbLocal.stopChild(child);
-});
+}, customTimeout);
