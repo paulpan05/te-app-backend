@@ -30,7 +30,7 @@ functions:
       - http: 'ANY {proxy+}'
         cors: true
     environment:
-      NODE_ENV: ${self:custom.nodeEnv.${opt:stage}}
+      NODE_ENV: ${self:custom.nodeEnv.${opt:stage, self:provider.stage}}
       ALG: RS256
       PROJECT_ID: triton-exchange
       PUBLIC_KEY_URL: https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
@@ -58,22 +58,11 @@ resources:
             AttributeType: S
           - AttributeName: creationTime
             AttributeType: S
-          - AttributeName: title
-            AttributeType: S
         KeySchema:
           - AttributeName: listingId
             KeyType: HASH
           - AttributeName: creationTime
             KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: TitleIndex
-            KeySchema:
-              - AttributeName: title
-                KeyType: HASH
-              - AttributeName: creationTime
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
     TETagsTable:
       Type: AWS::DynamoDB::Table
