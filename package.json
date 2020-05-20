@@ -4,15 +4,14 @@
   "description": "Free and For Sale Marketplace for UC San Diego Students",
   "main": "index.ts",
   "scripts": {
-    "start": "sls dynamodb install -s dev && sls offline start -s dev",
+    "start": "sls dynamodb install && sls offline start",
     "lint": "eslint ./ --ext .js,.mjs,.ts --color",
     "lint:fix": "eslint ./ --ext .js,.mjs,.ts --fix",
-    "test": "jest",
-    "startdb": "sls dynamodb start"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Triton-Exchange/te-app-backend.git"
+    "url": "git+https://github.com/paulpan05/te-app-backend.git"
   },
   "keywords": [
     "Marketplace",
@@ -22,9 +21,9 @@
   "author": "Paul Pan",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Triton-Exchange/te-app-backend/issues"
+    "url": "https://github.com/paulpan05/te-app-backend/issues"
   },
-  "homepage": "https://github.com/Triton-Exchange/te-app-backend#readme",
+  "homepage": "https://github.com/paulpan05/te-app-backend#readme",
   "dependencies": {
     "aws-serverless-express": "^3.3.8",
     "express": "^4.17.1",
