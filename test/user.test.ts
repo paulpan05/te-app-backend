@@ -25,6 +25,11 @@ async function asyncForEach(array: [any], callback: Function) {
   }
 }
 
+// optional config customization - default is your OS' temp directory and an Amazon server from US West
+DynamoDbLocal.configureInstaller({
+  installPath: './.dynamodb',
+});
+
 beforeAll(async () => {
   const dynamoLocalPort = 8000;
 
@@ -52,7 +57,7 @@ it('DynamoDB test', async () => {
   const result = await new Users(dynamodb).getProfile('asdfsaf');
   expect(result!.name).toBe('Paul Pan');
   return true;
-});
+}, 30000);
 
 afterAll(async () => {
   await DynamoDbLocal.stopChild(child);
