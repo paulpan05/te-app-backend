@@ -2,10 +2,9 @@ import { DynamoDB } from 'aws-sdk';
 import User from './user';
 import Listings from './listings';
 import Reports from './reports';
+import config from '../config';
 
-const isTest = process.env.JEST_WORKER_ID;
-
-const docClient = isTest
+const docClient = config.isTest
   ? ((process as any).dynamodb as DynamoDB.DocumentClient)
   : new DynamoDB.DocumentClient();
 

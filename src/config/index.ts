@@ -13,6 +13,7 @@ const config = {
     publicKeyUrl: process.env.PUBLIC_KEY_URL!,
     issUrl: process.env.ISS_URL!,
   },
+  isTest: process.env.JEST_WORKER_ID,
 };
 
 export default config;
