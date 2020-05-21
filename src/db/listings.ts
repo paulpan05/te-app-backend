@@ -37,6 +37,30 @@ class Listings {
     };
     await this.docClient.put(params).promise();
   }
+
+  async getListings() {
+    const params = {
+      TableName: 'TEListingsTable',
+      Limit: 10,
+    };
+    return (await this.docClient.scan(params).promise()).Items;
+  }
+
+  async markAsSold(listingId: string, buyerId: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+      },
+      UpdateExpression: 'SET sold = :value, soldTo = :buyer',
+      ExpressionAttributeValues: {
+        ':value': true,
+        ':buyer': buyerId,
+      },
+    };
+
+    await this.docClient.update(params).promise();
+  }
 }
 
 export default Listings;

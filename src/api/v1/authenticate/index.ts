@@ -31,7 +31,7 @@ const handleFetchNotOk = <T>(response: FetchResponse): Promise<T> => {
   return response.json() as Promise<T>;
 };
 
-const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.get('Authorization');
   if (!authHeader) {
     return next(new HTTPError.Unauthorized());

@@ -9,8 +9,7 @@ router.get('/profile', async (req, res, next) => {
   try {
     const result = await UsersTable.getProfile(res.locals.userId);
     if (result) {
-      res.send(result);
-      return next();
+      return res.send(result);
     }
     return next(new HttpError.NotFound('User Not Found.'));
   } catch (err) {
@@ -29,8 +28,7 @@ router.put('/update', async (req, res, next) => {
     if (req.body.location) {
       await UsersTable.updateLocation(res.locals.userId, req.body.location);
     }
-    res.send({ message: 'Success' });
-    return next();
+    return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
     return next(
@@ -40,17 +38,33 @@ router.put('/update', async (req, res, next) => {
 });
 
 router.post('/signup', async (req, res, next) => {
+  const { phone, location, customName, customEmail, customPicture } = req.body;
+  const { name, email, picture } = res.locals;
+  if (!name && !customName) {
+    return next(new HttpError.BadRequest('Missing name'));
+  }
+  if (!email && !customEmail) {
+    return next(new HttpError.BadRequest('Missing email'));
+  }
+  if (!picture && !customPicture) {
+    return next(new HttpError.BadRequest('Missing picture'));
+  }
+  if (!phone) {
+    return next(new HttpError.BadRequest('Missing phone number'));
+  }
+  if (!location) {
+    return next(new HttpError.BadRequest('Missing location'));
+  }
   try {
     await UsersTable.createProfile(
       res.locals.userId,
-      res.locals.name,
-      res.locals.email,
-      req.body.phone,
-      req.body.location,
-      res.locals.picture,
+      customName || name,
+      customEmail || email,
+      phone,
+      location,
+      customPicture || picture,
     );
-    res.send({ message: 'Success' });
-    return next();
+    return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
     return next(

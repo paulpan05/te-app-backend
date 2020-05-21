@@ -25,11 +25,11 @@ class Users {
         phone,
         location,
         picture,
+        activeListings: [],
         boughtListings: [],
         soldListings: [],
-        buyerRatings: [],
-        sellerRatings: [],
         savedListings: [],
+        ratings: [],
       },
     };
     await this.docClient.put(params).promise();
@@ -72,6 +72,36 @@ class Users {
       },
       ExpressionAttributeValues: {
         ':value': newLocation,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async removeActiveListing(userId: string, listingId: string) {
+    const activeListings = (await this.getProfile(userId))!.activeListings as [string];
+    activeListings.map(async (value, index) => {
+      if (value === listingId) {
+        const params = {
+          TableName: 'TEUsersTable',
+          Key: {
+            userId,
+          },
+          UpdateExpression: `REMOVE activeListings[${index}]`,
+        };
+        await this.docClient.update(params).promise();
+      }
+    });
+  }
+
+  async addSoldListing(userId: string, listingId: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET soldListings = list_append(soldListings, :value)',
+      ExpressionAttributeValues: {
+        ':value': listingId,
       },
     };
     await this.docClient.update(params).promise();
