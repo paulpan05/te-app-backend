@@ -2,14 +2,14 @@ import * as request from 'supertest';
 import app from '../../../src';
 
 export default () =>
-  describe('Test the root path', () => {
-    it('Resource not found test', async () => {
+  describe('Test the user path', () => {
+    it('Unauthorized test', async () => {
       let response: request.Response;
       try {
-        response = await request(app).get('/api/v1');
+        response = await request(app).get('/api/v1/user');
       } catch (err) {
         expect(err).toBe(undefined);
       }
-      expect(response!.status).toBe(404);
+      expect(response!.status).toBe(401);
     });
   });
