@@ -2,7 +2,7 @@ import root from './root';
 import user from './user';
 
 export default () =>
-  describe('API Tests', () => {
+  describe('Controller Tests', () => {
     root();
     user();
   });
