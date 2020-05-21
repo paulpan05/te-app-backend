@@ -3,7 +3,11 @@ import User from './user';
 import Listings from './listings';
 import Reports from './reports';
 
-const docClient = new DynamoDB.DocumentClient();
+const isTest = process.env.JEST_WORKER_ID;
+
+const docClient = isTest
+  ? ((process as any).dynamodb as DynamoDB.DocumentClient)
+  : new DynamoDB.DocumentClient();
 
 const UsersTable = new User(docClient);
 const ListingsTable = new Listings(docClient);

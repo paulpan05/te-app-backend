@@ -3,8 +3,8 @@ import Users from '../../src/db/user';
 const dynamodb = (process as any).dynamodb as AWS.DynamoDB.DocumentClient;
 
 export default () =>
-  describe('TEUsersTable test', () => {
-    it('DynamoDB test', async () => {
+  describe('Test the TEUsersTable', () => {
+    it('User insertion test', async () => {
       await new Users(dynamodb).createProfile(
         'asdfsaf',
         'Paul Pan',

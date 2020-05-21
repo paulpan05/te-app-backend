@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import app from '../../src';
+import app from '../../../src';
 
 export default () =>
   describe('Test the root path', () => {

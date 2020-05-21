@@ -1,6 +1,6 @@
 import user from './user';
 
 export default () =>
-  describe('Database Test', () => {
+  describe('Database Tests', () => {
     user();
   });
