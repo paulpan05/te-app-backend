@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable } from '../../../db';
-import HttpError from '../../../error/http';
+import { UsersTable } from '../db';
+import HttpError from '../error/http';
 
 const router = express.Router();
 
@@ -21,6 +21,9 @@ router.get('/profile', async (req, res, next) => {
 });
 
 router.put('/update', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
   try {
     if (req.body.phone) {
       await UsersTable.updatePhone(res.locals.userId, req.body.phone);
@@ -38,6 +41,9 @@ router.put('/update', async (req, res, next) => {
 });
 
 router.post('/signup', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
   const { phone, location, customName, customEmail, customPicture } = req.body;
   const { name, email, picture } = res.locals;
   if (!name && !customName) {

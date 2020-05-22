@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import fetch, { Response as FetchResponse } from 'node-fetch';
 import * as jwt from 'jsonwebtoken';
-import config from '../../../config';
-import HTTPError from '../../../error/http';
+import config from '../config';
+import HTTPError from '../error/http';
 
 interface Header {
   alg: string;

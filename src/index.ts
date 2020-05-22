@@ -13,7 +13,7 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use('/api/', api);
+app.use('/', api);
 app.use(httpErrorHandler);
 app.use(notFoundHandler);
 

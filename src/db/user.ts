@@ -106,6 +106,20 @@ class Users {
     };
     await this.docClient.update(params).promise();
   }
+
+  async addSavedListing(userId: string, listingId: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET savedListings = list_append(savedListings, :value)',
+      ExpressionAttributeValues: {
+        ':value': listingId,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
 }
 
 export default Users;

@@ -28,29 +28,33 @@ class Listings {
         location,
         tags,
         pictures,
-        creationDate: Date.now(),
+        creationTime: Date.now(),
         sold: false,
         soldTo: null,
         comments: [],
-        SavedCount: 0,
+        savedCount: 0,
       },
     };
     await this.docClient.put(params).promise();
   }
 
-  async getListings() {
-    const params = {
+  async getListings(exclusiveStartKey: any) {
+    const params: any = {
       TableName: 'TEListingsTable',
       Limit: 10,
     };
+    if (exclusiveStartKey) {
+      params.ExclusiveStartKey = exclusiveStartKey;
+    }
     return (await this.docClient.scan(params).promise()).Items;
   }
 
-  async markAsSold(listingId: string, buyerId: string) {
+  async markAsSold(listingId: string, creationTime: string, buyerId: string) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
         listingId,
+        creationTime,
       },
       UpdateExpression: 'SET sold = :value, soldTo = :buyer',
       ExpressionAttributeValues: {
@@ -58,7 +62,18 @@ class Listings {
         ':buyer': buyerId,
       },
     };
+    await this.docClient.update(params).promise();
+  }
 
+  async incrementSavedCount(listingId: string, creationTime: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'ADD savedCount 1',
+    };
     await this.docClient.update(params).promise();
   }
 }

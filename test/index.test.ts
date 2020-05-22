@@ -1,4 +1,4 @@
-import api from './api/v1';
+import api from './api';
 import db from './db';
 
 describe('Full Test', () => {
