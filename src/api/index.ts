@@ -1,8 +1,11 @@
 import * as express from 'express';
-import v1 from './v1';
+import authenticate from './authenticate';
+import users from './users';
+import listings from './listings';
 
 const router = express.Router();
 
-router.use('/v1', v1);
+router.use('/users', authenticate, users);
+router.use('/listings', listings);
 
 export default router;

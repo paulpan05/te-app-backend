@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable, ListingsTable } from '../../../db';
-import HttpError from '../../../error/http';
+import { UsersTable, ListingsTable } from '../db';
+import HttpError from '../error/http';
 
 const router = express.Router();
 
@@ -36,7 +36,7 @@ router.post('/sold', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-  let exclusiveStartKey;
+  let exclusiveStartKey: any;
   if (req.body) {
     exclusiveStartKey = req.body.exclusiveStartKey;
   }

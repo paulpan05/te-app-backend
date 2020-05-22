@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable } from '../../../db';
-import HttpError from '../../../error/http';
+import { UsersTable } from '../db';
+import HttpError from '../error/http';
 
 const router = express.Router();
 
