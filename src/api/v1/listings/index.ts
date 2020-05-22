@@ -6,7 +6,10 @@ import HttpError from '../../../error/http';
 const router = express.Router();
 
 router.post('/sold', async (req, res, next) => {
-  const { sellerId, buyerId, listingId } = req.body;
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
+  const { sellerId, buyerId, listingId, listingCreationTime } = req.body;
   if (!sellerId) {
     return next(new HttpError.BadRequest('Missing sellerId'));
   }
@@ -16,10 +19,13 @@ router.post('/sold', async (req, res, next) => {
   if (!listingId) {
     return next(new HttpError.BadRequest('Missing listingId'));
   }
+  if (!listingCreationTime) {
+    return next(new HttpError.BadRequest('Missing listingCreationTime'));
+  }
   try {
     await UsersTable.removeActiveListing(sellerId, listingId);
     await UsersTable.addSoldListing(sellerId, listingId);
-    await ListingsTable.markAsSold(listingId, buyerId);
+    await ListingsTable.markAsSold(listingId, listingCreationTime, buyerId);
     return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
@@ -30,8 +36,12 @@ router.post('/sold', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
+  let exclusiveStartKey;
+  if (req.body) {
+    exclusiveStartKey = req.body.exclusiveStartKey;
+  }
   try {
-    return res.send(await ListingsTable.getListings());
+    return res.send(await ListingsTable.getListings(exclusiveStartKey));
   } catch (err) {
     const castedError = err as AWSError;
     return next(
