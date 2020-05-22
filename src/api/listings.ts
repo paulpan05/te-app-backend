@@ -37,11 +37,13 @@ router.post('/sold', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   let exclusiveStartKey: any;
+  let limit: any;
   if (req.body) {
     exclusiveStartKey = req.body.exclusiveStartKey;
+    limit = req.body.limit;
   }
   try {
-    return res.send(await ListingsTable.getListings(exclusiveStartKey));
+    return res.send(await ListingsTable.getListings(exclusiveStartKey, limit));
   } catch (err) {
     const castedError = err as AWSError;
     return next(

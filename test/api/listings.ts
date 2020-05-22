@@ -10,7 +10,7 @@ export default () =>
       } catch (err) {
         expect(err).toBe(undefined);
       }
-      expect(response!.text).toBe('[]');
+      expect(response!.text).toBe('{"Items":[]}');
       expect(response!.status).toBe(200);
     });
   });

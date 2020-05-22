@@ -38,15 +38,14 @@ class Listings {
     await this.docClient.put(params).promise();
   }
 
-  async getListings(exclusiveStartKey: any) {
+  async getListings(exclusiveStartKey: any, limit: any) {
     const params: any = {
       TableName: 'TEListingsTable',
-      Limit: 10,
+      ExclusiveStartKey: exclusiveStartKey,
+      Limit: limit,
     };
-    if (exclusiveStartKey) {
-      params.ExclusiveStartKey = exclusiveStartKey;
-    }
-    return (await this.docClient.scan(params).promise()).Items;
+    const result = await this.docClient.scan(params).promise();
+    return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
   }
 
   async markAsSold(listingId: string, creationTime: string, buyerId: string) {
