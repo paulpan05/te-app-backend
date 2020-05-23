@@ -45,7 +45,21 @@ class Users {
     return (await this.docClient.get(params).promise()).Item;
   }
 
-  async updatePhone(userId: string, newPhone: string) {
+  async updateName(userId: string, name: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET name = :value',
+      ExpressionAttributeValues: {
+        ':value': name,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updatePhone(userId: string, phone: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -53,13 +67,41 @@ class Users {
       },
       UpdateExpression: 'SET phone = :value',
       ExpressionAttributeValues: {
-        ':value': newPhone,
+        ':value': phone,
       },
     };
     await this.docClient.update(params).promise();
   }
 
-  async updateLocation(userId: string, newLocation: string) {
+  async updateEmail(userId: string, email: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET email = :value',
+      ExpressionAttributeValues: {
+        ':value': email,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updatePicture(userId: string, picture: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET picture = :value',
+      ExpressionAttributeValues: {
+        ':value': picture,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updateLocation(userId: string, location: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -71,16 +113,16 @@ class Users {
         '#location': 'location',
       },
       ExpressionAttributeValues: {
-        ':value': newLocation,
+        ':value': location,
       },
     };
     await this.docClient.update(params).promise();
   }
 
-  async removeActiveListing(userId: string, listingId: string) {
+  async removeActiveListing(userId: string, listingId: string, creationTime: string) {
     const activeListings = (await this.getProfile(userId))!.activeListings as [string];
     for (let i = 0; i < activeListings.length; i += 1) {
-      if (activeListings[i] === listingId) {
+      if (activeListings[i][0] === listingId && activeListings[i][1] === creationTime) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
@@ -95,10 +137,10 @@ class Users {
     }
   }
 
-  async removeSavedListing(userId: string, listingId: string) {
+  async removeSavedListing(userId: string, listingId: string, creationTime: string) {
     const savedListings = (await this.getProfile(userId))!.savedListings as [string];
     for (let i = 0; i < savedListings.length; i += 1) {
-      if (savedListings[i] === listingId) {
+      if (savedListings[i][0] === listingId && savedListings[i][1] === creationTime) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
@@ -113,7 +155,7 @@ class Users {
     }
   }
 
-  async addSoldListing(userId: string, listingId: string) {
+  async addSoldListing(userId: string, listingId: string, creationTime: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -121,13 +163,13 @@ class Users {
       },
       UpdateExpression: 'SET soldListings = list_append(soldListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [listingId],
+        ':value': [[listingId, creationTime]],
       },
     };
     await this.docClient.update(params).promise();
   }
 
-  async addSavedListing(userId: string, listingId: string) {
+  async addSavedListing(userId: string, listingId: string, creationTime: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -135,7 +177,21 @@ class Users {
       },
       UpdateExpression: 'SET savedListings = list_append(savedListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [listingId],
+        ':value': [[listingId, creationTime]],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async addBoughtListing(userId: string, listingId: string, creationTime: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET boughtListings = list_append(boughtListings, :value)',
+      ExpressionAttributeValues: {
+        ':value': [[listingId, creationTime]],
       },
     };
     await this.docClient.update(params).promise();

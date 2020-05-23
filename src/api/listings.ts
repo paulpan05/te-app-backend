@@ -24,8 +24,8 @@ router.post('/sold', async (req, res, next) => {
     return next(new HttpError.BadRequest('Missing listingCreationTime'));
   }
   try {
-    await UsersTable.removeActiveListing(sellerId, listingId);
-    await UsersTable.addSoldListing(sellerId, listingId);
+    await UsersTable.removeActiveListing(sellerId, listingId, listingCreationTime);
+    await UsersTable.addSoldListing(sellerId, listingId, listingCreationTime);
     await ListingsTable.markAsSold(listingId, listingCreationTime, buyerId);
     return res.send({ message: 'Success' });
   } catch (err) {

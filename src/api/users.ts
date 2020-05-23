@@ -104,7 +104,7 @@ router.post('/save-listing', async (req, res, next) => {
     return next(new HttpError.BadRequest('Missing creationTime'));
   }
   try {
-    await UsersTable.addSavedListing(res.locals.userId, listingId);
+    await UsersTable.addSavedListing(res.locals.userId, listingId, creationTime);
     await ListingsTable.incrementSavedCount(listingId, creationTime);
     return res.send({ message: 'Success' });
   } catch (err) {
@@ -131,7 +131,7 @@ router.post('/unsave-listing', async (req, res, next) => {
     return next(new HttpError.BadRequest('Missing creationTime'));
   }
   try {
-    await UsersTable.removeSavedListing(res.locals.userId, listingId);
+    await UsersTable.removeSavedListing(res.locals.userId, listingId, creationTime);
     await ListingsTable.decrementSavedCount(listingId, creationTime);
     return res.send({ message: 'Success' });
   } catch (err) {
