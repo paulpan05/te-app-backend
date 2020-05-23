@@ -39,7 +39,7 @@ class Listings {
     await this.docClient.put(params).promise();
   }
 
-  async getListings(exclusiveStartKey: any, limit: number) {
+  async getListings(exclusiveStartKey?: any, limit?: number) {
     const params = {
       TableName: 'TEListingsTable',
       ExclusiveStartKey: exclusiveStartKey,
@@ -63,6 +63,17 @@ class Listings {
       },
     };
     return (await this.docClient.batchGet(params).promise()).Responses!.TEListingsTable;
+  }
+
+  async getListing(listingId: string, creationTime: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+    };
+    return (await this.docClient.get(params).promise()).Item;
   }
 
   async searchListings(searchTerm: string) {
@@ -115,6 +126,40 @@ class Listings {
       UpdateExpression: 'ADD savedCount -1',
     };
     await this.docClient.update(params).promise();
+  }
+
+  async addPicture(listingId: string, creationTime: string, picture: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'SET pictures = list_append(pictures, :value)',
+      ExpressionAttributeValues: {
+        ':value': [picture],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async deletePicture(listingId: string, creationTime: string, picture: string) {
+    const { pictures } = (await this.getListing(listingId, creationTime))!;
+    for (let i = 0; i < pictures.length; i += 1) {
+      if (pictures[i] === picture) {
+        const params = {
+          TableName: 'TEListingsTable',
+          Key: {
+            listingId,
+            creationTime,
+          },
+          UpdateExpression: `REMOVE pictures[${i}]`,
+        };
+        // eslint-disable-next-line no-await-in-loop
+        await this.docClient.update(params).promise();
+        return;
+      }
+    }
   }
 }
 
