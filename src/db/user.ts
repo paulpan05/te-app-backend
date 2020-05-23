@@ -95,6 +95,24 @@ class Users {
     }
   }
 
+  async removeSavedListing(userId: string, listingId: string) {
+    const savedListings = (await this.getProfile(userId))!.savedListings as [string];
+    for (let i = 0; i < savedListings.length; i += 1) {
+      if (savedListings[i] === listingId) {
+        const params = {
+          TableName: 'TEUsersTable',
+          Key: {
+            userId,
+          },
+          UpdateExpression: `REMOVE savedListings[${i}]`,
+        };
+        // eslint-disable-next-line no-await-in-loop
+        await this.docClient.update(params).promise();
+        return;
+      }
+    }
+  }
+
   async addSoldListing(userId: string, listingId: string) {
     const params = {
       TableName: 'TEUsersTable',

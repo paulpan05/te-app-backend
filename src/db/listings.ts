@@ -104,6 +104,18 @@ class Listings {
     };
     await this.docClient.update(params).promise();
   }
+
+  async decrementSavedCount(listingId: string, creationTime: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'ADD savedCount -1',
+    };
+    await this.docClient.update(params).promise();
+  }
 }
 
 export default Listings;
