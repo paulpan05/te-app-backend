@@ -40,6 +40,29 @@ router.post('/sold', async (req, res, next) => {
   }
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    let { exclusiveStartKey } = req.query;
+    if (exclusiveStartKey) {
+      exclusiveStartKey = JSON.parse(decodeURIComponent(req.query.exclusiveStartKey as string));
+    }
+    let numberLimit: any;
+    if (req.query.limit) {
+      numberLimit = Number(req.query.limit);
+    }
+    return res.send(await ListingsTable.getListings(exclusiveStartKey, numberLimit));
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
+    );
+  }
+});
+
 router.get('/byIds', async (req, res, next) => {
   try {
     if (!req.query.ids) {
@@ -59,29 +82,6 @@ router.get('/byIds', async (req, res, next) => {
       return [value, creationTimes[index]];
     });
     return res.send(await ListingsTable.getListingsByIds(listings));
-  } catch (err) {
-    const castedError = err as AWSError;
-    return next(
-      new HttpError.Custom(
-        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
-        castedError.message,
-        castedError.name,
-      ),
-    );
-  }
-});
-
-router.get('/', async (req, res, next) => {
-  try {
-    let { exclusiveStartKey } = req.query;
-    if (exclusiveStartKey) {
-      exclusiveStartKey = JSON.parse(decodeURIComponent(req.query.exclusiveStartKey as string));
-    }
-    let numberLimit: any;
-    if (req.query.limit) {
-      numberLimit = Number(req.query.limit);
-    }
-    return res.send(await ListingsTable.getListings(exclusiveStartKey, numberLimit));
   } catch (err) {
     const castedError = err as AWSError;
     return next(
