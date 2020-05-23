@@ -128,6 +128,40 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
+  async addTag(listingId: string, creationTime: string, tag: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'SET tags = list_append(tags, :value)',
+      ExpressionAttributeValues: {
+        ':value': [tag],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async deleteTag(listingId: string, creationTime: string, tag: string) {
+    const { tags } = (await this.getListing(listingId, creationTime))!;
+    for (let i = 0; i < tags.length; i += 1) {
+      if (tags[i] === tag) {
+        const params = {
+          TableName: 'TEListingsTable',
+          Key: {
+            listingId,
+            creationTime,
+          },
+          UpdateExpression: `REMOVE tags[${i}]`,
+        };
+        // eslint-disable-next-line no-await-in-loop
+        await this.docClient.update(params).promise();
+        return;
+      }
+    }
+  }
+
   async addPicture(listingId: string, creationTime: string, picture: string) {
     const params = {
       TableName: 'TEListingsTable',
