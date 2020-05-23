@@ -14,8 +14,8 @@ class Listings {
     price: number,
     description: string,
     location: string,
-    tags: [string],
-    pictures: [string],
+    tags: string[],
+    pictures: string[],
   ) {
     const params = {
       TableName: 'TEListingsTable',
@@ -23,6 +23,7 @@ class Listings {
         listingId,
         userId,
         title,
+        searchTitle: title.trim().toLowerCase(),
         price,
         description,
         location,
@@ -38,14 +39,42 @@ class Listings {
     await this.docClient.put(params).promise();
   }
 
-  async getListings(exclusiveStartKey: any, limit: any) {
-    const params: any = {
+  async getListings(exclusiveStartKey: any, limit: number) {
+    const params = {
       TableName: 'TEListingsTable',
       ExclusiveStartKey: exclusiveStartKey,
       Limit: limit,
     };
     const result = await this.docClient.scan(params).promise();
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
+  }
+
+  async getListingsByIds(listings: string[][]) {
+    const params = {
+      RequestItems: {
+        TEListingsTable: {
+          Keys: listings.map((value) => {
+            return {
+              listingId: value[0],
+              creationTime: value[1],
+            };
+          }),
+        },
+      },
+    };
+    return (await this.docClient.batchGet(params).promise()).Responses!.TEListingsTable;
+  }
+
+  async searchListings(searchTerm: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      FilterExpression: 'contains(searchTitle,:value)', // a string representing a constraint on the attribute
+      ExpressionAttributeValues: {
+        // a map of substitutions for all attribute values
+        ':value': { S: searchTerm.trim().toLowerCase() },
+      },
+    };
+    return (await this.docClient.scan(params).promise()).Items;
   }
 
   async markAsSold(listingId: string, creationTime: string, buyerId: string) {

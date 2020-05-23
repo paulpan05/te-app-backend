@@ -30,6 +30,13 @@ class Reports {
     };
     await this.docClient.put(params).promise();
   }
+
+  async getReports() {
+    const params = {
+      TableName: 'TEReportsTable',
+    };
+    return (await this.docClient.scan(params).promise()).Items;
+  }
 }
 
 export default Reports;

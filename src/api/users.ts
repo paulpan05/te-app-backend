@@ -1,7 +1,8 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable } from '../db';
+import { UsersTable, ListingsTable } from '../db';
 import HttpError from '../error/http';
+import config from '../config';
 
 const router = express.Router();
 
@@ -15,7 +16,11 @@ router.get('/profile', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });
@@ -35,7 +40,11 @@ router.put('/update', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });
@@ -74,7 +83,38 @@ router.post('/signup', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
+router.post('/save-listing', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
+  const { listingId, creationTime } = req.body;
+  if (!listingId) {
+    return next(new HttpError.BadRequest('Missing listingId'));
+  }
+  if (!creationTime) {
+    return next(new HttpError.BadRequest('Missing creationTime'));
+  }
+  try {
+    await UsersTable.addSavedListing(res.locals.userId, listingId);
+    await ListingsTable.incrementSavedCount(listingId, creationTime);
+    return res.send({ message: 'Success' });
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });

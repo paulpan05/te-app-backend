@@ -14,6 +14,9 @@ const config = {
     issUrl: process.env.ISS_URL!,
   },
   isTest: process.env.JEST_WORKER_ID,
+  constants: {
+    INTERNAL_SERVER_ERROR: 500,
+  },
 };
 
 export default config;
