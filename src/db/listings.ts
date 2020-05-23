@@ -49,6 +49,21 @@ class Listings {
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
   }
 
+  async getListingsByIds(ids: [string]) {
+    const params = {
+      RequestItems: {
+        TEListingsTable: {
+          Keys: ids.map((value) => {
+            return {
+              listingId: value,
+            };
+          }),
+        },
+      },
+    };
+    return (await this.docClient.batchGet(params).promise()).Responses;
+  }
+
   async searchListings(searchTerm: string) {
     const params = {
       TableName: 'TEListingsTable',

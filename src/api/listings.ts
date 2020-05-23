@@ -42,7 +42,16 @@ router.post('/sold', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const exclusiveStartKey = JSON.parse(decodeURIComponent(req.body.exclusiveStartKey));
+    if (!req.query.exclusiveStartKey || !req.query.limit) {
+      if (!req.query.ids) {
+        return next(new HttpError.BadRequest('Missing query parameters'));
+      }
+      return res.send(await ListingsTable.getListingsByIds(req.query.ids as [string]));
+    }
+    if (req.query.ids) {
+      return next(new HttpError.BadRequest('Cannot have both ids and other parameters passed in'));
+    }
+    const exclusiveStartKey = JSON.parse(decodeURIComponent(req.query.exclusiveStartKey as string));
     const limit = Number(req.query.limit);
     return res.send(await ListingsTable.getListings(exclusiveStartKey, limit));
   } catch (err) {

@@ -79,18 +79,20 @@ class Users {
 
   async removeActiveListing(userId: string, listingId: string) {
     const activeListings = (await this.getProfile(userId))!.activeListings as [string];
-    activeListings.map(async (value, index) => {
-      if (value === listingId) {
+    for (let i = 0; i < activeListings.length; i += 1) {
+      if (activeListings[i] === listingId) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
             userId,
           },
-          UpdateExpression: `REMOVE activeListings[${index}]`,
+          UpdateExpression: `REMOVE activeListings[${i}]`,
         };
+        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
+        return;
       }
-    });
+    }
   }
 
   async addSoldListing(userId: string, listingId: string) {
@@ -101,7 +103,7 @@ class Users {
       },
       UpdateExpression: 'SET soldListings = list_append(soldListings, :value)',
       ExpressionAttributeValues: {
-        ':value': listingId,
+        ':value': [listingId],
       },
     };
     await this.docClient.update(params).promise();
@@ -115,7 +117,21 @@ class Users {
       },
       UpdateExpression: 'SET savedListings = list_append(savedListings, :value)',
       ExpressionAttributeValues: {
-        ':value': listingId,
+        ':value': [listingId],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async addRating(userId: string, rating: number) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET ratings = list_append(ratings, :value)',
+      ExpressionAttributeValues: {
+        ':value': [rating],
       },
     };
     await this.docClient.update(params).promise();
