@@ -45,7 +45,21 @@ class Users {
     return (await this.docClient.get(params).promise()).Item;
   }
 
-  async updatePhone(userId: string, newPhone: string) {
+  async updateName(userId: string, name: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET name = :value',
+      ExpressionAttributeValues: {
+        ':value': name,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updatePhone(userId: string, phone: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -53,7 +67,35 @@ class Users {
       },
       UpdateExpression: 'SET phone = :value',
       ExpressionAttributeValues: {
-        ':value': newPhone,
+        ':value': phone,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updateEmail(userId: string, email: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET email = :value',
+      ExpressionAttributeValues: {
+        ':value': email,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updatePicture(userId: string, picture: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET picture = :value',
+      ExpressionAttributeValues: {
+        ':value': picture,
       },
     };
     await this.docClient.update(params).promise();
