@@ -14,8 +14,8 @@ class Listings {
     price: number,
     description: string,
     location: string,
-    tags: [string],
-    pictures: [string],
+    tags: string[],
+    pictures: string[],
   ) {
     const params = {
       TableName: 'TEListingsTable',
@@ -49,19 +49,20 @@ class Listings {
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
   }
 
-  async getListingsByIds(ids: [string]) {
+  async getListingsByIds(listings: string[][]) {
     const params = {
       RequestItems: {
         TEListingsTable: {
-          Keys: ids.map((value) => {
+          Keys: listings.map((value) => {
             return {
-              listingId: value,
+              listingId: value[0],
+              creationTime: value[1],
             };
           }),
         },
       },
     };
-    return (await this.docClient.batchGet(params).promise()).Responses;
+    return (await this.docClient.batchGet(params).promise()).Responses!.TEListingsTable;
   }
 
   async searchListings(searchTerm: string) {
