@@ -59,7 +59,7 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
-  async updateLocation(userId: string, newLocation: string) {
+  async updateLocation(userId: string, location: string) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -71,7 +71,7 @@ class Users {
         '#location': 'location',
       },
       ExpressionAttributeValues: {
-        ':value': newLocation,
+        ':value': location,
       },
     };
     await this.docClient.update(params).promise();

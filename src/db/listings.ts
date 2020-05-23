@@ -195,6 +195,38 @@ class Listings {
       }
     }
   }
+
+  async updatePrice(listingId: string, price: number) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+      },
+      UpdateExpression: 'SET price = :value',
+      ExpressionAttributeValues: {
+        ':value': price,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updateLocation(listingId: string, location: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+      },
+      UpdateExpression: 'SET #location = :value',
+      // we have to use this because Location is a reserved keyword
+      ExpressionAttributeNames: {
+        '#location': 'location',
+      },
+      ExpressionAttributeValues: {
+        ':value': location,
+      },
+    };
+    this.docClient.update(params).promise();
+  }
 }
 
 export default Listings;
