@@ -21,5 +21,6 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe('[]');
+      expect(response!.status).toBe(200);
     });
   });
