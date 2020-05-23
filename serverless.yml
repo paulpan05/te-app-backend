@@ -90,6 +90,23 @@ resources:
           - AttributeName: reportId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+    TEBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: tebucket
+        AccessControl: PublicReadWrite
+        CorsConfiguration:
+          CorsRules:
+          - AllowedMethods:
+            - GET
+            - PUT
+            - POST
+            - DELETE
+            - HEAD
+            AllowedOrigins:
+            - '*'
+            AllowedHeaders:
+            - '*'
 
 custom:
   dynamodb:

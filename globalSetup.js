@@ -33,7 +33,9 @@ module.exports = async () => {
 
   const resources = Object.values(YAML.parse(file).resources.Resources);
   await asyncForEach(resources, async (value) => {
-    const { Properties } = value;
-    await fullDynamo.createTable(Properties).promise();
+    const { Type, Properties } = value;
+    if (Type === 'AWS::DynamoDB::Table') {
+      await fullDynamo.createTable(Properties).promise();
+    }
   });
 };
