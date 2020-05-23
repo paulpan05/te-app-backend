@@ -2,6 +2,7 @@ import * as express from 'express';
 import { AWSError } from 'aws-sdk';
 import { UsersTable } from '../db';
 import HttpError from '../error/http';
+import config from '../config';
 
 const router = express.Router();
 
@@ -15,7 +16,11 @@ router.get('/profile', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });
@@ -35,7 +40,11 @@ router.put('/update', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });
@@ -74,7 +83,11 @@ router.post('/signup', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.code),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
     );
   }
 });

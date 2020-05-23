@@ -2,6 +2,7 @@ import * as express from 'express';
 import { AWSError } from 'aws-sdk';
 import { UsersTable, ListingsTable } from '../db';
 import HttpError from '../error/http';
+import config from '../config';
 
 const router = express.Router();
 
@@ -30,24 +31,44 @@ router.post('/sold', async (req, res, next) => {
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.name),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
     );
   }
 });
 
 router.get('/', async (req, res, next) => {
-  let exclusiveStartKey: any;
-  let limit: any;
-  if (req.body) {
-    exclusiveStartKey = req.body.exclusiveStartKey;
-    limit = req.body.limit;
-  }
   try {
+    const exclusiveStartKey = JSON.parse(decodeURIComponent(req.body.exclusiveStartKey));
+    const limit = Number(req.query.limit);
     return res.send(await ListingsTable.getListings(exclusiveStartKey, limit));
   } catch (err) {
     const castedError = err as AWSError;
     return next(
-      new HttpError.Custom(castedError.statusCode, castedError.message, castedError.name),
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
+    );
+  }
+});
+
+router.get('/search', async (req, res, next) => {
+  try {
+    const searchTerm = req.query.searchTerm as string;
+    return res.send(await ListingsTable.searchListings(searchTerm));
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
     );
   }
 });
