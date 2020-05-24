@@ -1,6 +1,6 @@
 # Triton Exchange Backend
 
-[![Build Status](https://travis-ci.com/paulpan05/te-app-backend.svg?token=AwrSN7YWy67cvrqMpyHB&branch=master)](https://travis-ci.com/paulpan05/te-app-backend)
+[![Deploy master branch](https://github.com/paulpan05/te-app-backend/workflows/Deploy%20master%20branch/badge.svg)](https://github.com/paulpan05/te-app-backend/actions)
 
 ## Project technologies
  - Firebase Auth
