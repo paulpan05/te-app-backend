@@ -130,7 +130,6 @@ class Users {
           },
           UpdateExpression: `REMOVE activeListings[${i}]`,
         };
-        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
         return;
       }
@@ -148,7 +147,6 @@ class Users {
           },
           UpdateExpression: `REMOVE savedListings[${i}]`,
         };
-        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
         return;
       }

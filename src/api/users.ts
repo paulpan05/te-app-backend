@@ -195,12 +195,9 @@ router.post('/make-listing', async (req, res, next) => {
     );
     await UsersTable.addActiveListing(res.locals.userId, listingId, creationTime);
     for (let i = 0; i < tags.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
       if (!(await TagsTable.getTag(tags[i]))) {
-        // eslint-disable-next-line no-await-in-loop
         await TagsTable.addTag(tags[i]);
       }
-      // eslint-disable-next-line no-await-in-loop
       await TagsTable.addListing(tags[i], listingId, creationTime);
     }
     return res.send({ message: 'Success' });

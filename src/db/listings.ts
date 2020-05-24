@@ -156,7 +156,6 @@ class Listings {
           },
           UpdateExpression: `REMOVE tags[${i}]`,
         };
-        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
         return;
       }
@@ -190,7 +189,6 @@ class Listings {
           },
           UpdateExpression: `REMOVE pictures[${i}]`,
         };
-        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
         return;
       }
