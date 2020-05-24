@@ -45,7 +45,7 @@ router.post('/addListing', async (req, res, next) => {
     if (parsedListing.length !== 2) {
       return next(new HttpError.BadRequest('Listing parameter mistake'));
     }
-    await TagsTable.addListing(tag as string, parsedListing);
+    await TagsTable.addListing(tag as string, parsedListing[0], Number(parsedListing[1]));
     return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
