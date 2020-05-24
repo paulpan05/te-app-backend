@@ -36,6 +36,15 @@ router.put('/update', async (req, res, next) => {
     if (req.body.location) {
       await UsersTable.updateLocation(res.locals.userId, req.body.location);
     }
+    if (req.body.picture) {
+      await UsersTable.updatePicture(res.locals.userId, req.body.picture);
+    }
+    if (req.body.name) {
+      await UsersTable.updateName(res.locals.userId, req.body.name);
+    }
+    if (req.body.email) {
+      await UsersTable.updateEmail(res.locals.userId, req.body.email);
+    }
     return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
