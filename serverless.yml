@@ -20,6 +20,9 @@ provider:
         - dynamodb:DeleteItem
       Resource: 
         - 'Fn::GetAtt': [ TEUsersTable, Arn ]
+        - 'Fn::GetAtt': [ TEListingsTable, Arn ]
+        - 'Fn::GetAtt': [ TETagsTable, Arn ]
+        - 'Fn::GetAtt': [ TEReportsTable, Arn ]
 
 functions:
   main:
