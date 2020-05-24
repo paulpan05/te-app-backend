@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable, ListingsTable } from '../db';
+import { UsersTable, ListingsTable, TagsTable } from '../db';
 import HttpError from '../error/http';
 import config from '../config';
 
@@ -142,6 +142,67 @@ router.post('/unsave-listing', async (req, res, next) => {
   try {
     await UsersTable.removeSavedListing(res.locals.userId, listingId, creationTime);
     await ListingsTable.decrementSavedCount(listingId, creationTime);
+    return res.send({ message: 'Success' });
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
+router.post('/make-listing', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
+  const { listingId, creationTime, title, price, description, location, tags, pictures } = req.body;
+  if (!listingId) {
+    return next(new HttpError.BadRequest('Missing listingId'));
+  }
+  if (!title) {
+    return next(new HttpError.BadRequest('Missing title'));
+  }
+  if (!price) {
+    return next(new HttpError.BadRequest('Missing price'));
+  }
+  if (!description) {
+    return next(new HttpError.BadRequest('Missing description'));
+  }
+  if (!location) {
+    return next(new HttpError.BadRequest('Missing location'));
+  }
+  if (!tags) {
+    return next(new HttpError.BadRequest('Missing tags'));
+  }
+  if (!pictures) {
+    return next(new HttpError.BadRequest('Missing picture'));
+  }
+  try {
+    await ListingsTable.createListing(
+      listingId,
+      creationTime,
+      res.locals.userId,
+      title,
+      price,
+      description,
+      location,
+      tags,
+      pictures,
+    );
+    await UsersTable.addActiveListing(res.locals.userId, listingId, creationTime);
+    for (let i = 0; i < tags.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      if (!(await TagsTable.getTag(tags[i]))) {
+        // eslint-disable-next-line no-await-in-loop
+        await TagsTable.addTag(tags[i]);
+      }
+      // eslint-disable-next-line no-await-in-loop
+      await TagsTable.addListing(tags[i], listingId, creationTime);
+    }
     return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
