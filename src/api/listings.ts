@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { AWSError } from 'aws-sdk';
-import { UsersTable, ListingsTable } from '../db';
+import { UsersTable, ListingsTable, TagsTable } from '../db';
 import HttpError from '../error/http';
 import config from '../config';
 
@@ -64,13 +64,13 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/byIds', async (req, res, next) => {
+  if (!req.query.ids) {
+    return next(new HttpError.BadRequest('Missing ids for listings'));
+  }
+  if (!req.query.creationTimes) {
+    return next(new HttpError.BadRequest('Missing creationTimes for listings'));
+  }
   try {
-    if (!req.query.ids) {
-      return next(new HttpError.BadRequest('Missing ids for listings'));
-    }
-    if (!req.query.creationTimes) {
-      return next(new HttpError.BadRequest('Missing creationTimes for listings'));
-    }
     const queryIds = (req.query.ids as string).split(',');
     const creationTimes = (req.query.creationTimes as string).split(',');
     if (queryIds.length !== creationTimes.length) {
@@ -98,6 +98,56 @@ router.get('/search', async (req, res, next) => {
   try {
     const searchTerm = req.query.searchTerm as string;
     return res.send(await ListingsTable.searchListings(searchTerm));
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
+    );
+  }
+});
+
+router.put('/update', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
+  const {
+    listingId,
+    creationTime,
+    price,
+    location,
+    picture,
+    tag,
+    deleteTag,
+    deletePicture,
+  } = req.body;
+  try {
+    if (price) {
+      await ListingsTable.updatePrice(listingId, creationTime, price);
+    }
+    if (location) {
+      await ListingsTable.updateLocation(listingId, creationTime, location);
+    }
+    if (picture) {
+      if (deletePicture) {
+        await ListingsTable.deletePicture(listingId, creationTime, picture);
+      } else {
+        await ListingsTable.addPicture(listingId, creationTime, picture);
+      }
+    }
+    if (tag) {
+      if (deleteTag) {
+        await ListingsTable.deleteTag(listingId, creationTime, tag);
+        await TagsTable.removeListing(tag, listingId, creationTime);
+      } else {
+        await ListingsTable.addPicture(listingId, creationTime, picture);
+        await TagsTable.addListing(tag, listingId, creationTime);
+      }
+    }
+    return res.send({ message: 'Success' });
   } catch (err) {
     const castedError = err as AWSError;
     return next(
