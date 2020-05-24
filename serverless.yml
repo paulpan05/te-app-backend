@@ -93,7 +93,7 @@ resources:
     TEBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: tebucket
+        BucketName: triton-exchange-bucket-photos
         AccessControl: PublicReadWrite
         CorsConfiguration:
           CorsRules:
