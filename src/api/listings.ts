@@ -6,7 +6,7 @@ import config from '../config';
 
 const router = express.Router();
 
-router.post('/sold', async (req, res, next) => {
+router.post('/sell', async (req, res, next) => {
   if (!req.body) {
     return next(new HttpError.BadRequest('Missing body'));
   }
@@ -79,7 +79,7 @@ router.get('/byIds', async (req, res, next) => {
       );
     }
     const listings = queryIds.map((value, index) => {
-      return [value, creationTimes[index]];
+      return [value, Number(creationTimes[index])];
     });
     return res.send(await ListingsTable.getListingsByIds(listings));
   } catch (err) {

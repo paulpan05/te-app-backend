@@ -50,7 +50,7 @@ class Listings {
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
   }
 
-  async getListingsByIds(listings: string[][]) {
+  async getListingsByIds(listings: (string | number)[][]) {
     const params = {
       RequestItems: {
         TEListingsTable: {
