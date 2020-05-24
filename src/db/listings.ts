@@ -9,6 +9,7 @@ class Listings {
 
   async createListing(
     listingId: string,
+    creationTime: number,
     userId: string,
     title: string,
     price: number,
@@ -29,7 +30,7 @@ class Listings {
         location,
         tags,
         pictures,
-        creationTime: Date.now(),
+        creationTime,
         sold: false,
         soldTo: null,
         comments: [],
@@ -49,7 +50,7 @@ class Listings {
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
   }
 
-  async getListingsByIds(listings: string[][]) {
+  async getListingsByIds(listings: (string | number)[][]) {
     const params = {
       RequestItems: {
         TEListingsTable: {
@@ -65,7 +66,7 @@ class Listings {
     return (await this.docClient.batchGet(params).promise()).Responses!.TEListingsTable;
   }
 
-  async getListing(listingId: string, creationTime: string) {
+  async getListing(listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -88,7 +89,7 @@ class Listings {
     return (await this.docClient.scan(params).promise()).Items;
   }
 
-  async markAsSold(listingId: string, creationTime: string, buyerId: string) {
+  async markAsSold(listingId: string, creationTime: number, buyerId: string) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -104,7 +105,7 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
-  async incrementSavedCount(listingId: string, creationTime: string) {
+  async incrementSavedCount(listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -116,7 +117,7 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
-  async decrementSavedCount(listingId: string, creationTime: string) {
+  async decrementSavedCount(listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -128,7 +129,7 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
-  async addTag(listingId: string, creationTime: string, tag: string) {
+  async addTag(listingId: string, creationTime: number, tag: string) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -143,7 +144,7 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
-  async deleteTag(listingId: string, creationTime: string, tag: string) {
+  async deleteTag(listingId: string, creationTime: number, tag: string) {
     const { tags } = (await this.getListing(listingId, creationTime))!;
     for (let i = 0; i < tags.length; i += 1) {
       if (tags[i] === tag) {
@@ -162,7 +163,7 @@ class Listings {
     }
   }
 
-  async addPicture(listingId: string, creationTime: string, picture: string) {
+  async addPicture(listingId: string, creationTime: number, picture: string) {
     const params = {
       TableName: 'TEListingsTable',
       Key: {
@@ -177,7 +178,7 @@ class Listings {
     await this.docClient.update(params).promise();
   }
 
-  async deletePicture(listingId: string, creationTime: string, picture: string) {
+  async deletePicture(listingId: string, creationTime: number, picture: string) {
     const { pictures } = (await this.getListing(listingId, creationTime))!;
     for (let i = 0; i < pictures.length; i += 1) {
       if (pictures[i] === picture) {

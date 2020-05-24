@@ -197,6 +197,20 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
+  async addActiveListing(userId: string, listingId: string, creationTime: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET activeListings = list_append(activeListings, :value)',
+      ExpressionAttributeValues: {
+        ':value': [[listingId, creationTime]],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
   async addRating(userId: string, rating: number) {
     const params = {
       TableName: 'TEUsersTable',

@@ -7,6 +7,16 @@ class Tags {
     this.docClient = docClient;
   }
 
+  async getTag(tag: string) {
+    const params = {
+      TableName: 'TETagsTable',
+      Key: {
+        tag,
+      },
+    };
+    return (await this.docClient.get(params).promise()).Item;
+  }
+
   async addTag(tag: string) {
     const params = {
       TableName: 'TETagsTable',
@@ -19,16 +29,10 @@ class Tags {
   }
 
   async getListings(tag: string) {
-    const params = {
-      TableName: 'TETagsTable',
-      Key: {
-        tag,
-      },
-    };
-    return (await this.docClient.get(params).promise()).Item!.listings as string[];
+    return (await this.getTag(tag))!.listings;
   }
 
-  async addListing(tag: string, listing: string[]) {
+  async addListing(tag: string, listingId: string, creationTime: number) {
     const params = {
       TableName: 'TETagsTable',
       Key: {
@@ -36,16 +40,16 @@ class Tags {
       },
       UpdateExpression: 'SET listings = list_append(listings, :value)',
       ExpressionAttributeValues: {
-        ':value': [listing],
+        ':value': [[listingId, creationTime]],
       },
     };
     await this.docClient.update(params).promise();
   }
 
-  async removeListing(tag: string, listing: string[]) {
+  async removeListing(tag: string, listingId: string, creationTime: number) {
     const listings = await this.getListings(tag);
     for (let i = 0; i < listings.length; i += 1) {
-      if (listings[i][0] === listing[0] && listings[i][1] === listing[1]) {
+      if (listings[i][0] === listingId && listings[i][1] === creationTime) {
         const params = {
           TableName: 'TETagsTable',
           Key: {

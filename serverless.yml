@@ -60,7 +60,7 @@ resources:
           - AttributeName: listingId
             AttributeType: S
           - AttributeName: creationTime
-            AttributeType: S
+            AttributeType: N
         KeySchema:
           - AttributeName: listingId
             KeyType: HASH
