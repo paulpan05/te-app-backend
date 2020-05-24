@@ -57,7 +57,6 @@ class Tags {
           },
           UpdateExpression: `REMOVE listings[${i}]`,
         };
-        // eslint-disable-next-line no-await-in-loop
         await this.docClient.update(params).promise();
         return;
       }
