@@ -88,4 +88,12 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
+export const testAuthenticate = async (req: Request, res: Response, next: NextFunction) => {
+  res.locals.name = 'abcd';
+  res.locals.picture = 'abcd';
+  res.locals.userId = 'abcd';
+  res.locals.email = 'abcd';
+  return next();
+};
+
 export default authenticate;

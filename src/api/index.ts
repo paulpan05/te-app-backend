@@ -1,11 +1,14 @@
 import * as express from 'express';
-import authenticate from './authenticate';
+import authenticate, { testAuthenticate } from './authenticate';
 import users from './users';
 import listings from './listings';
+import config from '../config';
 
 const router = express.Router();
 
-router.use('/users', authenticate, users);
-router.use('/listings', listings);
+const authMiddleware = config.isTest ? testAuthenticate : authenticate;
+
+router.use('/users', authMiddleware, users);
+router.use('/listings', authMiddleware, listings);
 
 export default router;
