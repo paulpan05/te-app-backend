@@ -1,8 +1,11 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import api from './api';
 import { httpErrorHandler, notFoundHandler } from './error/handlers';
 
 const app = express();
+
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://triton-exchange.netlify.app');
@@ -10,7 +13,6 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   );
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
   return next();
 });
 
