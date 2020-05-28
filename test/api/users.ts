@@ -3,7 +3,7 @@ import app from '../../src';
 
 export default () =>
   describe('Test the users path', () => {
-    it('Successful test', async () => {
+    it('Add user test', async () => {
       let response: request.Response;
       try {
         response = await request(app)
@@ -13,6 +13,18 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
+    it('Retrieve user test', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/users/profile');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe(
+        '{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","location":"Los Angeles","userId":"abcd","email":"abcd","picture":"abcd"}',
+      );
       expect(response!.status).toBe(200);
     });
   });
