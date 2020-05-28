@@ -49,7 +49,11 @@ class Users {
       Key: {
         userId,
       },
-      UpdateExpression: 'SET name = :value',
+      UpdateExpression: 'SET #name = :value',
+      // we have to use this because Location is a reserved keyword
+      ExpressionAttributeNames: {
+        '#name': 'name',
+      },
       ExpressionAttributeValues: {
         ':value': name,
       },
