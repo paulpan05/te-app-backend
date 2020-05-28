@@ -94,6 +94,27 @@ router.get('/byIds', async (req, res, next) => {
   }
 });
 
+router.get('/byTags', async (req, res, next) => {
+  try {
+    const tagsString = req.query.tags as string;
+    const tags = tagsString.split(',');
+    const result: any[] = [];
+    for (let i = 0; i < tags.length; i += 1) {
+      result.push(await TagsTable.getListings(tags[i]));
+    }
+    return res.send(result);
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.name,
+      ),
+    );
+  }
+});
+
 router.get('/search', async (req, res, next) => {
   try {
     const searchTerm = req.query.searchTerm as string;
