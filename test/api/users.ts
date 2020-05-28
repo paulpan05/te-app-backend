@@ -6,9 +6,7 @@ export default () =>
     it('Add user test', async () => {
       let response: request.Response;
       try {
-        response = await request(app)
-          .post('/users/signup')
-          .send({ phone: '123456', location: 'Los Angeles' });
+        response = await request(app).post('/users/signup').send({ phone: '123456' });
       } catch (err) {
         expect(err).toBe(undefined);
       }
