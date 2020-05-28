@@ -1,6 +1,6 @@
-import user from './user';
+import users from './users';
 
 export default () =>
   describe('Data Access Object Tests', () => {
-    user();
+    users();
   });
