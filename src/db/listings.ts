@@ -112,7 +112,10 @@ class Listings {
         listingId,
         creationTime,
       },
-      UpdateExpression: 'ADD savedCount 1',
+      UpdateExpression: 'ADD savedCount :value',
+      ExpressionAttributeValues: {
+        ':value': 1,
+      },
     };
     await this.docClient.update(params).promise();
   }
@@ -124,7 +127,10 @@ class Listings {
         listingId,
         creationTime,
       },
-      UpdateExpression: 'ADD savedCount -1',
+      UpdateExpression: 'ADD savedCount :value',
+      ExpressionAttributeValues: {
+        ':value': -1,
+      },
     };
     await this.docClient.update(params).promise();
   }
@@ -154,7 +160,10 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE tags[${i}]`,
+          UpdateExpression: `REMOVE tags[:value]`,
+          ExpressionAttributeValues: {
+            ':value': i,
+          },
         };
         await this.docClient.update(params).promise();
         return;
@@ -187,7 +196,10 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE pictures[${i}]`,
+          UpdateExpression: `REMOVE pictures[:value]`,
+          ExpressionAttributeValues: {
+            ':value': i,
+          },
         };
         await this.docClient.update(params).promise();
         return;
