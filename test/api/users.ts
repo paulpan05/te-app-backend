@@ -25,4 +25,23 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
+    it('Test make listing', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).post('/users/make-listing').send({
+          listingId: '123456',
+          creationTime: 2352352,
+          title: 'asdfsdaf',
+          price: 123123,
+          description: '1231232143',
+          location: '112423543452',
+          tags: [],
+          pictures: [],
+        });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
   });
