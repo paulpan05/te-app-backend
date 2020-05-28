@@ -32,17 +32,7 @@ const handleFetchNotOk = <T>(response: FetchResponse): Promise<T> => {
 };
 
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.get('Authorization');
-  if (!authHeader) {
-    return next(new HTTPError.Unauthorized());
-  }
-
-  const authParams = authHeader.split(' ');
-  if (authParams.length !== 2 || authParams[0] !== 'Bearer' || authParams[1].length === 0) {
-    return next(new HTTPError.Unauthorized());
-  }
-
-  const jwtToken = authParams[1];
+  const jwtToken = req.query.idToken as string;
   const decodedToken = jwt.decode(jwtToken, { complete: true });
   if (!decodedToken) {
     return next(new HTTPError.Unauthorized());
