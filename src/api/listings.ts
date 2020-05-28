@@ -96,6 +96,9 @@ router.get('/byIds', async (req, res, next) => {
 
 router.get('/byTags', async (req, res, next) => {
   try {
+    if (!req.query.tags) {
+      return next(new HttpError.BadRequest('Missing tags for query'));
+    }
     const tagsString = req.query.tags as string;
     const tags = tagsString.split(',');
     const result: any[] = [];
@@ -117,6 +120,9 @@ router.get('/byTags', async (req, res, next) => {
 
 router.get('/search', async (req, res, next) => {
   try {
+    if (!req.query.searchTerm) {
+      return next(new HttpError.BadRequest('Missing searchTerm for query'));
+    }
     const searchTerm = req.query.searchTerm as string;
     return res.send(await ListingsTable.searchListings(searchTerm));
   } catch (err) {
