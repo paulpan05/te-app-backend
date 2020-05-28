@@ -103,8 +103,8 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
-  async removeActiveListing(userId: string, listingId: string, creationTime: string) {
-    const activeListings = (await this.getProfile(userId))!.activeListings as [string];
+  async removeActiveListing(userId: string, listingId: string, creationTime: number) {
+    const activeListings = (await this.getProfile(userId))!.activeListings as (string | number)[];
     for (let i = 0; i < activeListings.length; i += 1) {
       if (activeListings[i][0] === listingId && activeListings[i][1] === creationTime) {
         const params = {
@@ -112,7 +112,10 @@ class Users {
           Key: {
             userId,
           },
-          UpdateExpression: `REMOVE activeListings[${i}]`,
+          UpdateExpression: `REMOVE activeListings[:value]`,
+          ExpressionAttributeValues: {
+            ':value': i,
+          },
         };
         await this.docClient.update(params).promise();
         return;
@@ -120,8 +123,8 @@ class Users {
     }
   }
 
-  async removeSavedListing(userId: string, listingId: string, creationTime: string) {
-    const savedListings = (await this.getProfile(userId))!.savedListings as [string];
+  async removeSavedListing(userId: string, listingId: string, creationTime: number) {
+    const savedListings = (await this.getProfile(userId))!.savedListings as (string | number)[];
     for (let i = 0; i < savedListings.length; i += 1) {
       if (savedListings[i][0] === listingId && savedListings[i][1] === creationTime) {
         const params = {
@@ -129,7 +132,10 @@ class Users {
           Key: {
             userId,
           },
-          UpdateExpression: `REMOVE savedListings[${i}]`,
+          UpdateExpression: `REMOVE savedListings[:value]`,
+          ExpressionAttributeValues: {
+            ':value': i,
+          },
         };
         await this.docClient.update(params).promise();
         return;
@@ -137,7 +143,7 @@ class Users {
     }
   }
 
-  async addSoldListing(userId: string, listingId: string, creationTime: string) {
+  async addSoldListing(userId: string, listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -151,7 +157,7 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
-  async addSavedListing(userId: string, listingId: string, creationTime: string) {
+  async addSavedListing(userId: string, listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -165,7 +171,7 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
-  async addBoughtListing(userId: string, listingId: string, creationTime: string) {
+  async addBoughtListing(userId: string, listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
@@ -179,7 +185,7 @@ class Users {
     await this.docClient.update(params).promise();
   }
 
-  async addActiveListing(userId: string, listingId: string, creationTime: string) {
+  async addActiveListing(userId: string, listingId: string, creationTime: number) {
     const params = {
       TableName: 'TEUsersTable',
       Key: {
