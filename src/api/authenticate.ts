@@ -32,22 +32,22 @@ const handleFetchNotOk = <T>(response: FetchResponse): Promise<T> => {
 };
 
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const jwtToken = req.query.idToken as string;
-  const decodedToken = jwt.decode(jwtToken, { complete: true });
-  if (!decodedToken) {
-    return next(new HTTPError.Unauthorized());
-  }
-
-  if (typeof decodedToken === 'string') {
-    return next(new HTTPError.Unauthorized());
-  }
-
-  const { header, payload } = decodedToken as {
-    header: Header;
-    payload: Payload;
-  } & typeof decodedToken;
-
   try {
+    const jwtToken = req.query.idToken as string;
+    const decodedToken = jwt.decode(jwtToken, { complete: true });
+    if (!decodedToken) {
+      return next(new HTTPError.Unauthorized());
+    }
+
+    if (typeof decodedToken === 'string') {
+      return next(new HTTPError.Unauthorized());
+    }
+
+    const { header, payload } = decodedToken as {
+      header: Header;
+      payload: Payload;
+    } & typeof decodedToken;
+
     const apiResponse = await fetch(config.firebase.publicKeyUrl);
     const response = await handleFetchNotOk<PublicKeysResponse>(apiResponse);
     const curTime = Math.ceil(Date.now() / 1000);
