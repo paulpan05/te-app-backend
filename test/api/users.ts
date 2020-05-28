@@ -23,7 +23,7 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe(
-        '{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","location":"Los Angeles","userId":"abcd","email":"abcd","picture":"abcd"}',
+        '{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","userId":"abcd","email":"abcd","picture":"abcd"}',
       );
       expect(response!.status).toBe(200);
     });
