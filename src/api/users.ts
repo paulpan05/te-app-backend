@@ -75,8 +75,8 @@ router.post('/signup', async (req, res, next) => {
       res.locals.userId,
       customName || name,
       customEmail || email,
-      phone,
       customPicture || picture,
+      phone,
     );
     return res.send({ message: 'Success' });
   } catch (err) {
