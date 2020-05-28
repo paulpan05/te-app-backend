@@ -11,9 +11,8 @@ class Users {
     userId: string,
     name: string,
     email: string,
-    phone: string,
-    location: string,
     picture: string,
+    phone?: string,
   ) {
     const params = {
       TableName: 'TEUsersTable',
@@ -23,7 +22,6 @@ class Users {
         name,
         email,
         phone,
-        location,
         picture,
         activeListings: [],
         boughtListings: [],
@@ -96,24 +94,6 @@ class Users {
       UpdateExpression: 'SET picture = :value',
       ExpressionAttributeValues: {
         ':value': picture,
-      },
-    };
-    await this.docClient.update(params).promise();
-  }
-
-  async updateLocation(userId: string, location: string) {
-    const params = {
-      TableName: 'TEUsersTable',
-      Key: {
-        userId,
-      },
-      UpdateExpression: 'SET #location = :value',
-      // we have to use this because Location is a reserved keyword
-      ExpressionAttributeNames: {
-        '#location': 'location',
-      },
-      ExpressionAttributeValues: {
-        ':value': location,
       },
     };
     await this.docClient.update(params).promise();

@@ -9,9 +9,8 @@ export default () =>
           'asdfsaf',
           'Paul Pan',
           'panjunhong05@gmail.com',
-          '+1 (626) 691-8088',
-          'Los Angeles, CA',
           'hello.jpg',
+          '+1 (626) 691-8088',
         );
       } catch (err) {
         expect(err).toBe(undefined);
