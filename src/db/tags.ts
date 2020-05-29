@@ -7,6 +7,13 @@ class Tags {
     this.docClient = docClient;
   }
 
+  async getTags() {
+    const params = {
+      TableName: 'TETagsTable',
+    };
+    return (await this.docClient.scan(params).promise()).Items;
+  }
+
   async getTag(tag: string) {
     const params = {
       TableName: 'TETagsTable',

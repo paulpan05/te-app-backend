@@ -8,7 +8,11 @@ const router = express.Router();
 
 router.get('/profile', async (req, res, next) => {
   try {
-    const result = await UsersTable.getProfile(res.locals.userId);
+    let { userId } = res.locals;
+    if (req.query.targetUserId) {
+      userId = req.query.targetUserId as string;
+    }
+    const result = await UsersTable.getProfile(userId);
     if (result) {
       return res.send(result);
     }
