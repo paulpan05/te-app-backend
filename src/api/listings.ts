@@ -146,12 +146,12 @@ router.put('/update', async (req, res, next) => {
     creationTime,
     price,
     location,
-    picture,
-    tag,
-    comment,
-    deleteTag,
-    deletePicture,
-    deleteComment,
+    tags,
+    pictures,
+    comments,
+    deleteTags,
+    deletePictures,
+    deleteComments,
   } = req.body;
   try {
     if (price) {
@@ -160,27 +160,45 @@ router.put('/update', async (req, res, next) => {
     if (location) {
       await ListingsTable.updateLocation(listingId, creationTime, location);
     }
-    if (picture) {
-      if (deletePicture) {
-        await ListingsTable.deletePicture(listingId, creationTime, picture);
+    if (pictures) {
+      if (deletePictures) {
+        for (let i = 0; i < pictures.length; i += 1) {
+          await ListingsTable.deletePicture(listingId, creationTime, pictures[i]);
+        }
       } else {
-        await ListingsTable.addPicture(listingId, creationTime, picture);
+        for (let i = 0; i < pictures.length; i += 1) {
+          await ListingsTable.addPicture(listingId, creationTime, pictures[i]);
+        }
       }
     }
-    if (tag) {
-      if (deleteTag) {
-        await ListingsTable.deleteTag(listingId, creationTime, tag);
-        await TagsTable.removeListing(tag, listingId, creationTime);
+    if (tags) {
+      if (deleteTags) {
+        for (let i = 0; i < tags.length; i += 1) {
+          await ListingsTable.deleteTag(listingId, creationTime, tags[i]);
+          await TagsTable.removeListing(tags[i], listingId, creationTime);
+        }
       } else {
-        await ListingsTable.addPicture(listingId, creationTime, picture);
-        await TagsTable.addListing(tag, listingId, creationTime);
+        for (let i = 0; i < tags.length; i += 1) {
+          await ListingsTable.addTag(listingId, creationTime, tags[i]);
+          await TagsTable.addListing(tags[i], listingId, creationTime);
+        }
       }
     }
-    if (comment) {
-      if (deleteComment) {
-        await ListingsTable.deleteComment(listingId, creationTime, comment[0]);
+    if (comments) {
+      if (deleteComments) {
+        for (let i = 0; i < comments.length; i += 1) {
+          await ListingsTable.deleteComment(listingId, creationTime, comments[i][0]);
+        }
       } else {
-        await ListingsTable.addComment(listingId, creationTime, comment[0], comment[1], comment[2]);
+        for (let i = 0; i < comments.length; i += 1) {
+          await ListingsTable.addComment(
+            listingId,
+            creationTime,
+            comments[i][0],
+            comments[i][1],
+            comments[i][2],
+          );
+        }
       }
     }
     return res.send({ message: 'Success' });
