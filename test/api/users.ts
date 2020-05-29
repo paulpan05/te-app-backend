@@ -25,23 +25,16 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
-    it('Test make listing', async () => {
+    it('Listing search by term', async () => {
       let response: request.Response;
       try {
-        response = await request(app).post('/users/make-listing').send({
-          listingId: '123456',
-          creationTime: 2352352,
-          title: 'asdfsdaf',
-          price: 123123,
-          description: '1231232143',
-          location: '112423543452',
-          tags: [],
-          pictures: [],
-        });
+        response = await request(app).get('/listings/search?searchTerm=asdf');
       } catch (err) {
         expect(err).toBe(undefined);
       }
-      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.text).toBe(
+        '[{"sold":false,"comments":[],"soldTo":null,"creationTime":12345,"description":"asdfsdaf","listingId":"12324","searchTitle":"asdf","title":"asdf","userId":"abcd","pictures":[],"tags":[],"price":1234,"location":"asdf","savedCount":1}]',
+      );
       expect(response!.status).toBe(200);
     });
   });

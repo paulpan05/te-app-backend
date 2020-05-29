@@ -83,7 +83,7 @@ class Listings {
       FilterExpression: 'contains(searchTitle,:value)', // a string representing a constraint on the attribute
       ExpressionAttributeValues: {
         // a map of substitutions for all attribute values
-        ':value': { S: searchTerm.trim().toLowerCase() },
+        ':value': searchTerm.trim().toLowerCase(),
       },
     };
     return (await this.docClient.scan(params).promise()).Items;

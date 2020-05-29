@@ -157,6 +157,9 @@ router.post('/make-listing', async (req, res, next) => {
   if (!listingId) {
     return next(new HttpError.BadRequest('Missing listingId'));
   }
+  if (!creationTime) {
+    return next(new HttpError.BadRequest('Missing creationTime'));
+  }
   if (!title) {
     return next(new HttpError.BadRequest('Missing title'));
   }
