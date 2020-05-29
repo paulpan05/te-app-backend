@@ -148,8 +148,10 @@ router.put('/update', async (req, res, next) => {
     location,
     picture,
     tag,
+    comment,
     deleteTag,
     deletePicture,
+    deleteComment,
   } = req.body;
   try {
     if (price) {
@@ -172,6 +174,13 @@ router.put('/update', async (req, res, next) => {
       } else {
         await ListingsTable.addPicture(listingId, creationTime, picture);
         await TagsTable.addListing(tag, listingId, creationTime);
+      }
+    }
+    if (comment) {
+      if (deleteComment) {
+        await ListingsTable.deleteComment(listingId, creationTime, comment[0]);
+      } else {
+        await ListingsTable.addComment(listingId, creationTime, comment[0], comment[1], comment[2]);
       }
     }
     return res.send({ message: 'Success' });

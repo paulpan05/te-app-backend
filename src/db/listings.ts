@@ -201,6 +201,45 @@ class Listings {
     }
   }
 
+  async addComment(
+    listingId: string,
+    creationTime: number,
+    commentId: string,
+    userId: string,
+    content: string,
+  ) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'SET pictures = list_append(comments, :value)',
+      ExpressionAttributeValues: {
+        ':value': [[commentId, userId, content]],
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async deleteComment(listingId: string, creationTime: number, commentId: string) {
+    const { comments } = (await this.getListing(listingId, creationTime))!;
+    for (let i = 0; i < comments.length; i += 1) {
+      if (comments[i][0] === commentId) {
+        const params = {
+          TableName: 'TEListingsTable',
+          Key: {
+            listingId,
+            creationTime,
+          },
+          UpdateExpression: `REMOVE comments[${i}]`,
+        };
+        await this.docClient.update(params).promise();
+        return;
+      }
+    }
+  }
+
   async updatePrice(listingId: string, creationTime: number, price: number) {
     const params = {
       TableName: 'TEListingsTable',
