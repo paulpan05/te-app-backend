@@ -83,7 +83,7 @@ class Listings {
       FilterExpression: 'contains(searchTitle,:value)', // a string representing a constraint on the attribute
       ExpressionAttributeValues: {
         // a map of substitutions for all attribute values
-        ':value': { S: searchTerm.trim().toLowerCase() },
+        ':value': searchTerm.trim().toLowerCase(),
       },
     };
     return (await this.docClient.scan(params).promise()).Items;
@@ -160,10 +160,7 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE tags[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE tags[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;
@@ -196,10 +193,7 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE pictures[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE pictures[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;

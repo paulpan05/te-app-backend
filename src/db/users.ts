@@ -112,10 +112,7 @@ class Users {
           Key: {
             userId,
           },
-          UpdateExpression: `REMOVE activeListings[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE activeListings[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;
@@ -132,10 +129,7 @@ class Users {
           Key: {
             userId,
           },
-          UpdateExpression: `REMOVE savedListings[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE savedListings[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;
