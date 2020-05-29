@@ -35,6 +35,16 @@ class Tags {
     await this.docClient.put(params).promise();
   }
 
+  async removeTag(tag: string) {
+    const params = {
+      TableName: 'TETagsTable',
+      Key: {
+        tag,
+      },
+    };
+    await this.docClient.delete(params).promise();
+  }
+
   async getListings(tag: string) {
     return (await this.getTag(tag))!.listings;
   }
