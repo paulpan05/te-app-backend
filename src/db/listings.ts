@@ -40,6 +40,17 @@ class Listings {
     await this.docClient.put(params).promise();
   }
 
+  async deleteListing(listingId: string, creationTime: number) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+    };
+    await this.docClient.delete(params).promise();
+  }
+
   async getListings(exclusiveStartKey?: any, limit?: number) {
     const params = {
       TableName: 'TEListingsTable',

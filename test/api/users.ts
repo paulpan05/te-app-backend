@@ -37,4 +37,38 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
+    it('Remove the listing', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app)
+          .delete('/users/delete-listing')
+          .send({ listingId: '12324', creationTime: 12345, tags: [] });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
+    it('Listing search by term again', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/listings/search?searchTerm=asdf');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('[]');
+      expect(response!.status).toBe(200);
+    });
+    it('Search user', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/users/search?name=abcd');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe(
+        '[{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","userId":"abcd","email":"abcd","picture":"abcd"}]',
+      );
+      expect(response!.status).toBe(200);
+    });
   });

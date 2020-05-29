@@ -29,6 +29,24 @@ router.get('/profile', async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res, next) => {
+  try {
+    if (!req.query.name) {
+      return next(new HttpError.BadRequest('Missing name of user'));
+    }
+    return res.send(await UsersTable.searchProfiles(req.query.name as string));
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
 router.put('/update', async (req, res, next) => {
   if (!req.body) {
     return next(new HttpError.BadRequest('Missing body'));
@@ -196,6 +214,42 @@ router.post('/make-listing', async (req, res, next) => {
         await TagsTable.addTag(tags[i]);
       }
       await TagsTable.addListing(tags[i], listingId, creationTime);
+    }
+    return res.send({ message: 'Success' });
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
+router.delete('/delete-listing', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError.BadRequest('Missing body'));
+  }
+  const { listingId, creationTime, tags } = req.body;
+  if (!listingId) {
+    return next(new HttpError.BadRequest('Missing listingId'));
+  }
+  if (!creationTime) {
+    return next(new HttpError.BadRequest('Missing creationTime'));
+  }
+  if (!tags) {
+    return next(new HttpError.BadRequest('Missing tags'));
+  }
+  try {
+    await ListingsTable.deleteListing(listingId, creationTime);
+    await UsersTable.removeActiveListing(res.locals.userId, listingId, creationTime);
+    for (let i = 0; i < tags.length; i += 1) {
+      if ((await TagsTable.getTag(tags[i]))!.listings.length === 0) {
+        await TagsTable.removeTag(tags[i]);
+      }
+      await TagsTable.removeListing(tags[i], listingId, creationTime);
     }
     return res.send({ message: 'Success' });
   } catch (err) {
