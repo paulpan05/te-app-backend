@@ -29,6 +29,24 @@ router.get('/profile', async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res, next) => {
+  try {
+    if (!req.query.name) {
+      return next(new HttpError.BadRequest('Missing name of user'));
+    }
+    return res.send(await UsersTable.searchProfiles(req.query.name as string));
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
 router.put('/update', async (req, res, next) => {
   if (!req.body) {
     return next(new HttpError.BadRequest('Missing body'));

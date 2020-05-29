@@ -33,6 +33,20 @@ class Users {
     await this.docClient.put(params).promise();
   }
 
+  async searchProfiles(name: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      FilterExpression: 'contains(#name,:value)',
+      ExpressionAttributeNames: {
+        '#name': 'name',
+      },
+      ExpressionAttributeValues: {
+        ':value': name.trim().toLowerCase(),
+      },
+    };
+    return (await this.docClient.scan(params).promise()).Items;
+  }
+
   async getProfile(userId: string) {
     const params = {
       TableName: 'TEUsersTable',

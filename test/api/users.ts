@@ -37,4 +37,16 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
+    it('Search user', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/users/search?name=abcd');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe(
+        '[{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","userId":"abcd","email":"abcd","picture":"abcd"}]',
+      );
+      expect(response!.status).toBe(200);
+    });
   });
