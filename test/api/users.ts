@@ -33,7 +33,7 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe(
-        '[{"sold":false,"comments":[],"soldTo":null,"creationTime":12345,"description":"asdfsdaf","listingId":"12324","searchTitle":"asdf","title":"asdf","userId":"abcd","pictures":[],"tags":[],"price":1234,"location":"asdf","savedCount":1}]',
+        '[{"sold":false,"comments":[],"soldTo":null,"creationTime":12345,"description":"asdfsdaf","listingId":"12324","searchTitle":"asdf","title":"asdf","userId":"abcd","pictures":[],"tags":[],"price":1234,"location":"asdf","savedCount":0}]',
       );
       expect(response!.status).toBe(200);
     });

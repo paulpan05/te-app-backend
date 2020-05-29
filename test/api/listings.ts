@@ -74,4 +74,16 @@ export default () =>
       expect(response!.text).toBe('{"message":"Success"}');
       expect(response!.status).toBe(200);
     });
+    it('Unsave a listing', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app)
+          .post('/users/unsave-listing')
+          .send({ listingId: '12324', creationTime: 12345 });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
   });

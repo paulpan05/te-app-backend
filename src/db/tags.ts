@@ -62,10 +62,7 @@ class Tags {
           Key: {
             tag,
           },
-          UpdateExpression: `REMOVE listings[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE listings[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;

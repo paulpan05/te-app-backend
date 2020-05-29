@@ -160,10 +160,7 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE tags[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE tags[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;
@@ -196,10 +193,7 @@ class Listings {
             listingId,
             creationTime,
           },
-          UpdateExpression: `REMOVE pictures[:value]`,
-          ExpressionAttributeValues: {
-            ':value': i,
-          },
+          UpdateExpression: `REMOVE pictures[${i}]`,
         };
         await this.docClient.update(params).promise();
         return;
