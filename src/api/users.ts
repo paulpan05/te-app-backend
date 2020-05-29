@@ -246,10 +246,10 @@ router.delete('/delete-listing', async (req, res, next) => {
     await ListingsTable.deleteListing(listingId, creationTime);
     await UsersTable.removeActiveListing(res.locals.userId, listingId, creationTime);
     for (let i = 0; i < tags.length; i += 1) {
+      await TagsTable.removeListing(tags[i], listingId, creationTime);
       if ((await TagsTable.getTag(tags[i]))!.listings.length === 0) {
         await TagsTable.removeTag(tags[i]);
       }
-      await TagsTable.removeListing(tags[i], listingId, creationTime);
     }
     return res.send({ message: 'Success' });
   } catch (err) {
