@@ -20,6 +20,7 @@ class Users {
         // a map of attribute name to AttributeValue
         userId,
         name,
+        searchName: name.trim().toLowerCase(),
         email,
         phone,
         picture,
@@ -37,12 +38,9 @@ class Users {
   async searchProfiles(name: string) {
     const params = {
       TableName: 'TEUsersTable',
-      FilterExpression: 'contains(#name,:value)',
-      ExpressionAttributeNames: {
-        '#name': 'name',
-      },
+      FilterExpression: 'contains(searchName,:value)',
       ExpressionAttributeValues: {
-        ':value': name,
+        ':value': name.trim().toLowerCase(),
       },
     };
     return (await this.docClient.scan(params).promise()).Items;
@@ -100,13 +98,14 @@ class Users {
       Key: {
         userId,
       },
-      UpdateExpression: 'SET #name = :value',
+      UpdateExpression: 'SET #name = :value, searchName = :searchValue',
       // we have to use this because Location is a reserved keyword
       ExpressionAttributeNames: {
         '#name': 'name',
       },
       ExpressionAttributeValues: {
         ':value': name,
+        ':searchValue': name.trim().toLowerCase(),
       },
     };
     await this.docClient.update(params).promise();

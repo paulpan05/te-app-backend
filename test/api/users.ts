@@ -21,7 +21,7 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe(
-        '{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}',
+        '{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"searchName":"abcd","name":"abcd","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}',
       );
       expect(response!.status).toBe(200);
     });
@@ -67,7 +67,29 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe(
-        '[{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"name":"abcd","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}]',
+        '[{"activeListings":[],"phone":"123456","soldListings":[],"savedListings":[],"boughtListings":[],"ratings":[],"searchName":"abcd","name":"abcd","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}]',
+      );
+      expect(response!.status).toBe(200);
+    });
+    it('User update', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).put('/users/update').send({ name: 'Paul Pan' });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
+    it('Search user Paul', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/users/search?name=Paul%20Pan');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe(
+        '[{"activeListings":[],"phone":"123456","savedListings":[],"soldListings":[],"boughtListings":[],"ratings":[],"searchName":"paul pan","name":"Paul Pan","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}]',
       );
       expect(response!.status).toBe(200);
     });
