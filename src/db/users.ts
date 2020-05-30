@@ -28,6 +28,7 @@ class Users {
         soldListings: [],
         savedListings: [],
         ratings: [],
+        listingsToRate: [],
       },
     };
     await this.docClient.put(params).promise();
@@ -45,6 +46,42 @@ class Users {
       },
     };
     return (await this.docClient.scan(params).promise()).Items;
+  }
+
+  async addListingToRate(
+    userId: string,
+    listingId: string,
+    creationTime: number,
+    sellerId: string,
+  ) {
+    const params = {
+      TableName: 'TEUsersTable',
+      Key: {
+        userId,
+      },
+      UpdateExpression: 'SET listingsToRate = list_append(listingsToRate, :value)',
+      ExpressionAttributeValues: {
+        ':value': [[listingId, creationTime, sellerId]],
+      },
+    };
+    await this.docClient.scan(params).promise();
+  }
+
+  async removeListingToRate(userId: string, listingId: string, creationTime: number) {
+    const listingsToRate = (await this.getProfile(userId))!.listingsToRate as (string | number)[];
+    for (let i = 0; i < listingsToRate.length; i += 1) {
+      if (listingsToRate[i][0] === listingId && listingsToRate[i][1] === creationTime) {
+        const params = {
+          TableName: 'TEUsersTable',
+          Key: {
+            userId,
+          },
+          UpdateExpression: `REMOVE listingsToRate[${i}]`,
+        };
+        await this.docClient.update(params).promise();
+        return;
+      }
+    }
   }
 
   async getProfile(userId: string) {
