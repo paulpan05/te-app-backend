@@ -78,7 +78,7 @@ export default () =>
       let response: request.Response;
       try {
         response = await request(app)
-          .post('/users/unsave-listing')
+          .delete('/users/unsave-listing')
           .send({ listingId: '12324', creationTime: 12345 });
       } catch (err) {
         expect(err).toBe(undefined);
