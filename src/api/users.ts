@@ -29,6 +29,32 @@ router.get('/profile', async (req, res, next) => {
   }
 });
 
+router.post('/rate-user', async (req, res, next) => {
+  try {
+    if (!req.body) {
+      return next(new HttpError.BadRequest('Missing body'));
+    }
+    const { rating, toRateUserId } = req.body;
+    if (!rating) {
+      return next(new HttpError.BadRequest('Missing rating'));
+    }
+    if (!toRateUserId) {
+      return next(new HttpError.BadRequest('Missing toRateUserId'));
+    }
+    await UsersTable.addRating(toRateUserId, rating);
+    return res.send({ message: 'Success' });
+  } catch (err) {
+    const castedError = err as AWSError;
+    return next(
+      new HttpError.Custom(
+        castedError.statusCode || config.constants.INTERNAL_SERVER_ERROR,
+        castedError.message,
+        castedError.code,
+      ),
+    );
+  }
+});
+
 router.get('/search', async (req, res, next) => {
   try {
     if (!req.query.name) {
@@ -140,7 +166,7 @@ router.post('/save-listing', async (req, res, next) => {
   }
 });
 
-router.post('/unsave-listing', async (req, res, next) => {
+router.delete('/unsave-listing', async (req, res, next) => {
   if (!req.body) {
     return next(new HttpError.BadRequest('Missing body'));
   }

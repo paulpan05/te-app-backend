@@ -26,6 +26,7 @@ router.post('/sell', async (req, res, next) => {
   try {
     await UsersTable.removeActiveListing(sellerId, listingId, listingCreationTime);
     await UsersTable.addSoldListing(sellerId, listingId, listingCreationTime);
+    await UsersTable.addBoughtListing(buyerId, listingId, listingCreationTime);
     await ListingsTable.markAsSold(listingId, listingCreationTime, buyerId);
     return res.send({ message: 'Success' });
   } catch (err) {
