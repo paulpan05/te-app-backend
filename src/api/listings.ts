@@ -145,7 +145,9 @@ router.put('/update', async (req, res, next) => {
   const {
     listingId,
     creationTime,
+    title,
     price,
+    description,
     location,
     tags,
     pictures,
@@ -155,6 +157,12 @@ router.put('/update', async (req, res, next) => {
     deleteComments,
   } = req.body;
   try {
+    if (title) {
+      await ListingsTable.updateTitle(listingId, creationTime, title);
+    }
+    if (description) {
+      await ListingsTable.updateDescription(listingId, creationTime, description);
+    }
     if (price) {
       await ListingsTable.updatePrice(listingId, creationTime, price);
     }

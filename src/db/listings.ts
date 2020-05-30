@@ -251,6 +251,36 @@ class Listings {
     }
   }
 
+  async updateTitle(listingId: string, creationTime: number, title: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'SET title = :value',
+      ExpressionAttributeValues: {
+        ':value': title,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
+  async updateDescription(listingId: string, creationTime: number, description: string) {
+    const params = {
+      TableName: 'TEListingsTable',
+      Key: {
+        listingId,
+        creationTime,
+      },
+      UpdateExpression: 'SET description = :value',
+      ExpressionAttributeValues: {
+        ':value': description,
+      },
+    };
+    await this.docClient.update(params).promise();
+  }
+
   async updatePrice(listingId: string, creationTime: number, price: number) {
     const params = {
       TableName: 'TEListingsTable',
