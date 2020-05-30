@@ -225,7 +225,7 @@ class Listings {
         listingId,
         creationTime,
       },
-      UpdateExpression: 'SET pictures = list_append(comments, :value)',
+      UpdateExpression: 'SET comments = list_append(comments, :value)',
       ExpressionAttributeValues: {
         ':value': [[commentId, userId, content]],
       },
