@@ -42,7 +42,7 @@ class Users {
         '#name': 'name',
       },
       ExpressionAttributeValues: {
-        ':value': name.trim().toLowerCase(),
+        ':value': name,
       },
     };
     return (await this.docClient.scan(params).promise()).Items;
