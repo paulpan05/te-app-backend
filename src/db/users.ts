@@ -62,7 +62,7 @@ class Users {
         ':value': [[listingId, creationTime, sellerId]],
       },
     };
-    await this.docClient.scan(params).promise();
+    await this.docClient.update(params).promise();
   }
 
   async removeListingToRate(userId: string, listingId: string, creationTime: number) {

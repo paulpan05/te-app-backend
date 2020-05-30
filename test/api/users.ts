@@ -71,6 +71,20 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
+    it('Rate user', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).post('/users/add-listing-to-rate').send({
+          buyerId: 'abcd',
+          listingId: '12324',
+          creationTime: 12345,
+        });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
     it('User update', async () => {
       let response: request.Response;
       try {
@@ -89,7 +103,7 @@ export default () =>
         expect(err).toBe(undefined);
       }
       expect(response!.text).toBe(
-        '[{"activeListings":[],"phone":"123456","savedListings":[],"soldListings":[],"boughtListings":[],"ratings":[],"searchName":"paul pan","name":"Paul Pan","listingsToRate":[],"userId":"abcd","email":"abcd","picture":"abcd"}]',
+        '[{"activeListings":[],"phone":"123456","savedListings":[],"soldListings":[],"boughtListings":[],"ratings":[],"searchName":"paul pan","name":"Paul Pan","listingsToRate":[["12324",12345,"abcd"]],"userId":"abcd","email":"abcd","picture":"abcd"}]',
       );
       expect(response!.status).toBe(200);
     });
