@@ -61,16 +61,19 @@ class Users {
       },
       UpdateExpression: 'SET listingsToRate = list_append(listingsToRate, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime, sellerId]],
+        ':value': [JSON.stringify([listingId, creationTime, sellerId])],
       },
     };
     await this.docClient.scan(params).promise();
   }
 
   async removeListingToRate(userId: string, listingId: string, creationTime: number) {
-    const listingsToRate = (await this.getProfile(userId))!.listingsToRate as (string | number)[];
+    const listingsToRate = (await this.getProfile(userId))!.listingsToRate as string[];
     for (let i = 0; i < listingsToRate.length; i += 1) {
-      if (listingsToRate[i][0] === listingId && listingsToRate[i][1] === creationTime) {
+      if (
+        JSON.parse(listingsToRate[i])[0] === listingId &&
+        JSON.parse(listingsToRate[i])[1] === creationTime
+      ) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
@@ -155,9 +158,12 @@ class Users {
   }
 
   async removeActiveListing(userId: string, listingId: string, creationTime: number) {
-    const activeListings = (await this.getProfile(userId))!.activeListings as (string | number)[];
+    const activeListings = (await this.getProfile(userId))!.activeListings as string[];
     for (let i = 0; i < activeListings.length; i += 1) {
-      if (activeListings[i][0] === listingId && activeListings[i][1] === creationTime) {
+      if (
+        JSON.parse(activeListings[i])[0] === listingId &&
+        JSON.parse(activeListings[i])[1] === creationTime
+      ) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
@@ -172,9 +178,12 @@ class Users {
   }
 
   async removeSavedListing(userId: string, listingId: string, creationTime: number) {
-    const savedListings = (await this.getProfile(userId))!.savedListings as (string | number)[];
+    const savedListings = (await this.getProfile(userId))!.savedListings as string[];
     for (let i = 0; i < savedListings.length; i += 1) {
-      if (savedListings[i][0] === listingId && savedListings[i][1] === creationTime) {
+      if (
+        JSON.parse(savedListings[i])[0] === listingId &&
+        JSON.parse(savedListings[i])[1] === creationTime
+      ) {
         const params = {
           TableName: 'TEUsersTable',
           Key: {
@@ -196,7 +205,7 @@ class Users {
       },
       UpdateExpression: 'SET soldListings = list_append(soldListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime]],
+        ':value': [JSON.stringify([listingId, creationTime])],
       },
     };
     await this.docClient.update(params).promise();
@@ -210,7 +219,7 @@ class Users {
       },
       UpdateExpression: 'SET savedListings = list_append(savedListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime]],
+        ':value': [JSON.stringify([listingId, creationTime])],
       },
     };
     await this.docClient.update(params).promise();
@@ -224,7 +233,7 @@ class Users {
       },
       UpdateExpression: 'SET boughtListings = list_append(boughtListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime]],
+        ':value': [JSON.stringify([listingId, creationTime])],
       },
     };
     await this.docClient.update(params).promise();
@@ -238,7 +247,7 @@ class Users {
       },
       UpdateExpression: 'SET activeListings = list_append(activeListings, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime]],
+        ':value': [JSON.stringify([listingId, creationTime])],
       },
     };
     await this.docClient.update(params).promise();

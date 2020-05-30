@@ -227,7 +227,7 @@ class Listings {
       },
       UpdateExpression: 'SET pictures = list_append(comments, :value)',
       ExpressionAttributeValues: {
-        ':value': [[commentId, userId, content]],
+        ':value': [JSON.stringify([commentId, userId, content])],
       },
     };
     await this.docClient.update(params).promise();
@@ -236,7 +236,7 @@ class Listings {
   async deleteComment(listingId: string, creationTime: number, commentId: string) {
     const { comments } = (await this.getListing(listingId, creationTime))!;
     for (let i = 0; i < comments.length; i += 1) {
-      if (comments[i][0] === commentId) {
+      if (JSON.parse(comments[i])[0] === commentId) {
         const params = {
           TableName: 'TEListingsTable',
           Key: {

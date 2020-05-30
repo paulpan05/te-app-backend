@@ -57,7 +57,7 @@ class Tags {
       },
       UpdateExpression: 'SET listings = list_append(listings, :value)',
       ExpressionAttributeValues: {
-        ':value': [[listingId, creationTime]],
+        ':value': [JSON.stringify([listingId, creationTime])],
       },
     };
     await this.docClient.update(params).promise();
@@ -66,7 +66,7 @@ class Tags {
   async removeListing(tag: string, listingId: string, creationTime: number) {
     const listings = await this.getListings(tag);
     for (let i = 0; i < listings.length; i += 1) {
-      if (listings[i][0] === listingId && listings[i][1] === creationTime) {
+      if (JSON.parse(listings[i])[0] === listingId && JSON.parse(listings[i])[1] === creationTime) {
         const params = {
           TableName: 'TETagsTable',
           Key: {
