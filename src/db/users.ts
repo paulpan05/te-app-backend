@@ -46,6 +46,17 @@ class Users {
     return (await this.docClient.scan(params).promise()).Items;
   }
 
+  async searchProfilesByEmail(email: string) {
+    const params = {
+      TableName: 'TEUsersTable',
+      FilterExpression: 'email = :value',
+      ExpressionAttributeValues: {
+        ':value': email,
+      },
+    };
+    return (await this.docClient.scan(params).promise()).Items;
+  }
+
   async addListingToRate(
     userId: string,
     listingId: string,

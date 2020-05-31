@@ -57,10 +57,13 @@ router.post('/rate-user', async (req, res, next) => {
 
 router.get('/search', async (req, res, next) => {
   try {
-    if (!req.query.name) {
-      return next(new HttpError.BadRequest('Missing name of user'));
+    if (req.query.name) {
+      return res.send(await UsersTable.searchProfiles(req.query.name as string));
     }
-    return res.send(await UsersTable.searchProfiles(req.query.name as string));
+    if (req.query.email) {
+      return res.send(await UsersTable.searchProfilesByEmail(req.query.email as string));
+    }
+    return next(new HttpError.BadRequest('Missing query params.'));
   } catch (err) {
     const castedError = err as AWSError;
     return next(
