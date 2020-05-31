@@ -107,6 +107,27 @@ export default () =>
             listingId: '12324',
             creationTime: 12345,
             comments: [['12233', '23344', '12345']],
+            tags: ['hello', 'world'],
+            pictures: ['asdfb', 'ewfgsfd'],
+          });
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"message":"Success"}');
+      expect(response!.status).toBe(200);
+    });
+    it('Listing update remove tags', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app)
+          .put('/listings/update')
+          .send({
+            listingId: '12324',
+            creationTime: 12345,
+            tags: ['hello', 'world'],
+            pictures: ['asdfb', 'ewfgsfd'],
+            deletePictures: true,
+            deleteTags: true,
           });
       } catch (err) {
         expect(err).toBe(undefined);

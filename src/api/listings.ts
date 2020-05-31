@@ -194,9 +194,15 @@ router.put('/update', async (req, res, next) => {
         for (let i = 0; i < tags.length; i += 1) {
           await ListingsTable.deleteTag(listingId, creationTime, tags[i]);
           await TagsTable.removeListing(tags[i], listingId, creationTime);
+          if ((await TagsTable.getListings(tags[i])).length === 0) {
+            await TagsTable.removeTag(tags[i]);
+          }
         }
       } else {
         for (let i = 0; i < tags.length; i += 1) {
+          if (!(await TagsTable.getTag(tags[i]))) {
+            await TagsTable.addTag(tags[i]);
+          }
           await ListingsTable.addTag(listingId, creationTime, tags[i]);
           await TagsTable.addListing(tags[i], listingId, creationTime);
         }
