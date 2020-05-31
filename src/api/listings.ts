@@ -104,7 +104,16 @@ router.get('/byTags', async (req, res, next) => {
     const tags = tagsString.split(',');
     const result: any[] = [];
     for (let i = 0; i < tags.length; i += 1) {
-      result.push(await TagsTable.getListings(tags[i]));
+      const currentListings = await TagsTable.getListings(tags[i]);
+      for (let j = 0; j < currentListings.length; j += 1) {
+        const currentListing = await ListingsTable.getListing(
+          currentListings[j][0],
+          currentListings[j][1],
+        );
+        if (currentListing!.sold === false) {
+          result.push(currentListing);
+        }
+      }
     }
     return res.send(result);
   } catch (err) {

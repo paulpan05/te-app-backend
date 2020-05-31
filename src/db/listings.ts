@@ -56,6 +56,10 @@ class Listings {
       TableName: 'TEListingsTable',
       ExclusiveStartKey: exclusiveStartKey,
       Limit: limit,
+      FilterExpression: 'sold = :value',
+      ExpressionAttributeValues: {
+        ':value': false,
+      },
     };
     const result = await this.docClient.scan(params).promise();
     return { Items: result.Items, LastEvaluatedKey: result.LastEvaluatedKey };
@@ -91,10 +95,11 @@ class Listings {
   async searchListings(searchTerm: string) {
     const params = {
       TableName: 'TEListingsTable',
-      FilterExpression: 'contains(searchTitle,:value)', // a string representing a constraint on the attribute
+      FilterExpression: 'contains(searchTitle,:value) AND sold = :soldValue', // a string representing a constraint on the attribute
       ExpressionAttributeValues: {
         // a map of substitutions for all attribute values
         ':value': searchTerm.trim().toLowerCase(),
+        ':soldValue': false,
       },
     };
     return (await this.docClient.scan(params).promise()).Items;

@@ -107,4 +107,14 @@ export default () =>
       );
       expect(response!.status).toBe(200);
     });
+    it('Find non-existent user', async () => {
+      let response: request.Response;
+      try {
+        response = await request(app).get('/users/profile?targetUserId=1234');
+      } catch (err) {
+        expect(err).toBe(undefined);
+      }
+      expect(response!.text).toBe('{"error":{"status":404,"message":"User Not Found."}}');
+      expect(response!.status).toBe(404);
+    });
   });
