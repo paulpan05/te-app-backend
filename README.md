@@ -1,5 +1,7 @@
 # Triton Exchange Backend
 
+The front-end repository is located here: https://github.com/paulpan05/te-app-frontend
+
 ![Triton Exchange](./full-app-logo.svg)
 
 ## CI Status
